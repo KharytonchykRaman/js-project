@@ -3,6 +3,10 @@
     margin: 0;
     text-decoration: none;
 }
+html,
+body{
+    height: 100%;
+}
 
 .header{
     background-color:darkolivegreen;
@@ -25,3 +29,16 @@
 .logo{
     color:white
 }
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .content {
+    flex: 1 0 auto;
+  }
+  .footer {
+    flex: 0 0 auto;
+    background-color:darkkhaki;
+  }
