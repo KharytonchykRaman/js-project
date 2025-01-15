@@ -36,3 +36,18 @@ async function inputCurrency(){
 
 inputTemperature()
 inputCurrency()
+
+const createTodoButton = document.getElementById('createTodo-button')
+const creationTodoWindow = document.getElementById('createTodo-dialog')
+const closeTodoButton = document.getElementById('closeModal')
+
+function openModalWindow(){
+    creationTodoWindow.showModal()
+}
+
+function closeModalWindow(){
+    creationTodoWindow.close()
+}
+
+createTodoButton.addEventListener('click', openModalWindow)
+closeTodoButton.addEventListener('click', closeModalWindow)

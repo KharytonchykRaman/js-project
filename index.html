@@ -17,17 +17,65 @@
                 <div class="header-container">
                     <a href="" class="logo">Список дел</a>
                     <div class="info">
-                        <div id="currency">currency: </div>
-                        <div id="weather">temperature: </div>
+                        <div class="info" id="currency">Валюта: </div>
+                        <div class="info" id="weather">Температура: </div>
                     </div>
                 </div>
             </header>
             <main class="main">
-
+                <section class="section-1">
+                    <button id="createTodo-button">Добавить дело</button>
+                    <dialog id="createTodo-dialog">
+                        <form id="creatForm" action="" method="">
+                            <label>
+                              Название:
+                              <input
+                                type="text"
+                                name="name"
+                                id="name"
+                                placeholder="название новой задачи"
+                                required
+                              >
+                            </label>
+                          
+                            <label>
+                              Описание:
+                              <input
+                                type="text"
+                                name="discription"
+                                id="discription"
+                                placeholder="описание новой задачи"
+                                required
+                              >
+                            </label>
+                          
+                            <label>
+                              Дедлайн:
+                              <input type="date" name="deadline" required>
+                            </label>
+                          
+                            <label>
+                              Теги:
+                              <select name="tags">
+                              </select>
+                            </label>
+                          
+                            <label>
+                              Статус выполнения
+                              <select name="status" required>
+                                <option value="pending" selected>В процессе</option>
+                                <option value="completed">Завершено</option>
+                              </select>
+                            </label>
+                            <button type="reset" id="closeModal">Отмена</button>
+                            <button type="submit">Сохранить</button>
+                          </form>
+                    </dialog>
+                </section>
             </main>
         </div>
         <footer class="footer">
-            1243567890
+            created by
         </footer>
     </div>
 </body>

@@ -6,10 +6,13 @@
 html,
 body{
     height: 100%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    background-color: #f5f5f5;
 }
 
 .header{
-    background-color:darkolivegreen;
+    background-color:#3498db;
     padding: 30px 100px;
 }
 
@@ -24,10 +27,12 @@ body{
 .info{
     display: flex;
     gap: 50px;
+    font-size: 25px;
 }
 
 .logo{
-    color:white
+    color:white;
+    font-size: 30px;
 }
 
 .wrapper {
@@ -38,6 +43,8 @@ body{
   .content {
     flex: 1 0 auto;
   }
+
+
   .footer {
     flex: 0 0 auto;
     background-color:darkkhaki;
