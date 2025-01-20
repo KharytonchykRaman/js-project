@@ -2,81 +2,73 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script defer src="app.js"></script>
-    <title>Project X</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+  <title>Project X</title>
 </head>
 
 <body>
-    <div class="wrapper">
-        <div class="content">
-            <header class="header">
-                <div class="header-container">
-                    <a href="" class="logo">Список дел</a>
-                    <div class="info">
-                        <div class="info" id="currency">Валюта: </div>
-                        <div class="info" id="weather">Температура: </div>
-                    </div>
-                </div>
-            </header>
-            <main class="main">
-                <section class="section-1">
-                    <button id="createTodo-button">Добавить дело</button>
-                    <dialog id="createTodo-dialog">
-                        <form id="creatForm" action="" method="">
-                            <label>
-                              Название:
-                              <input
-                                type="text"
-                                name="name"
-                                id="name"
-                                placeholder="название новой задачи"
-                                required
-                              >
-                            </label>
-                          
-                            <label>
-                              Описание:
-                              <input
-                                type="text"
-                                name="discription"
-                                id="discription"
-                                placeholder="описание новой задачи"
-                                required
-                              >
-                            </label>
-                          
-                            <label>
-                              Дедлайн:
-                              <input type="date" name="deadline" required>
-                            </label>
-                          
-                            <label>
-                              Теги:
-                              <select name="tags">
-                              </select>
-                            </label>
-                          
-                            <label>
-                              Статус выполнения
-                              <select name="status" required>
-                                <option value="pending" selected>В процессе</option>
-                                <option value="completed">Завершено</option>
-                              </select>
-                            </label>
-                            <button type="reset" id="closeModal">Отмена</button>
-                            <button type="submit">Сохранить</button>
-                          </form>
-                    </dialog>
-                </section>
-            </main>
+  <div class="wrapper">
+    <div class="content">
+      <header class="header">
+        <div class="header-container">
+          <a href="" class="logo">Список дел</a>
+          <div class="info">
+            <div class="info" id="currency">Валюта: </div>
+            <div class="info" id="weather">Температура: </div>
+          </div>
         </div>
-        <footer class="footer">
-            created by
-        </footer>
+      </header>
+      <main class="main">
+        <section class="section-1">
+          <button id="createTodo-button">Добавить дело</button>
+          <dialog id="createTodo-dialog">
+            <form id="createForm" action="" method="dialog">
+              <label>
+                Название:
+                <input class="modal-content" type="text" name="name" id="newToDo-name" placeholder="название новой задачи">
+              </label>
+
+              <label>
+                Описание:
+                <input class="modal-content" type="text" name="discription" id="newToDo-discription"
+                  placeholder="описание новой задачи">
+              </label>
+
+              <label>
+                Дедлайн:
+                <input class="modal-content" type="date" name="deadline" id="newToDo-date">
+              </label>
+
+              <label>
+                Теги:
+                <select class="modal-content" name="tags" id="newToDo-tags">
+                </select>
+              </label>
+
+              <label>
+                Статус выполнения
+                <select class="modal-content" name="status" required>
+                  <option value="pending" selected>В процессе</option>
+                  <option value="completed">Завершено</option>
+                </select>
+              </label>
+              <div class="form-buttons-container">
+                <button class="modal-content" type="reset" id="closeModal">Отмена</button>
+                <button class="modal-content" type="submit" id="acceptCreation">Сохранить</button>
+              </div>
+            </form>
+          </dialog>
+        </section>
+      </main>
     </div>
+    <footer class="footer">
+      created by
+    </footer>
+  </div>
 </body>
+
 </html>
