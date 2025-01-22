@@ -29,12 +29,13 @@
             <form id="createForm" action="" method="dialog">
               <label>
                 Название:
-                <input class="modal-content" type="text" name="name" id="newToDo-name" placeholder="название новой задачи">
+                <input class="modal-content" type="text" name="name" id="newToDo-name"
+                  placeholder="название новой задачи">
               </label>
 
               <label>
                 Описание:
-                <input class="modal-content" type="text" name="discription" id="newToDo-discription"
+                <input class="modal-content" type="text" name="description" id="newToDo-description"
                   placeholder="описание новой задачи">
               </label>
 
@@ -46,19 +47,20 @@
               <label>
                 Теги:
                 <select class="modal-content" name="tags" id="newToDo-tags">
+                  <option value="pending" selected>В процессе</option>
                 </select>
               </label>
 
               <label>
                 Статус выполнения
-                <select class="modal-content" name="status" required>
+                <select class="modal-content" name="status" id="newToDo-status" required>
                   <option value="pending" selected>В процессе</option>
                   <option value="completed">Завершено</option>
                 </select>
               </label>
               <div class="form-buttons-container">
                 <button class="modal-content" type="reset" id="closeModal">Отмена</button>
-                <button class="modal-content" type="submit" id="acceptCreation">Сохранить</button>
+                <button class="modal-content" type="reset" id="acceptCreation">Сохранить</button>
               </div>
             </form>
           </dialog>

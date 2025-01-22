@@ -1,3 +1,20 @@
+class ToDoList {
+  constructor() {
+    this.todos = [];
+  }
+
+  addToDo(newToDo) {
+    this.todos.push(newToDo);
+    alert("Задача добавлена!");
+  }
+
+  removeToDoById(todoId) {
+    //code
+  }
+}
+
+const LOCAL_STORAGE_KEY = 1;
+
 async function fetchDataWeather() {
   const response = await fetch(
     "https://api.openweathermap.org/data/2.5/weather?q=Minsk&appid=1ea453f5501c528eb93b8765879e5373"
@@ -39,18 +56,11 @@ async function inputCurrency() {
 inputTemperature();
 inputCurrency();
 
-const createTodoButton = document.getElementById("createTodo-button");
-const creationTodoWindow = document.getElementById("createTodo-dialog");
-const cancelCreationButton = document.getElementById("closeModal");
-const acceptCreationButton = document.getElementById("acceptCreation");
-
-let todoArray = [];
-
 function openModalWindow() {
   creationTodoWindow.showModal();
 }
 
-function closeModalWindow() {
+function closeCreationModalWindow() {
   creationTodoWindow.close();
 }
 
@@ -73,24 +83,60 @@ function validateNewToDo() {
 
   if (selectedDate < today) {
     alert("wrong deadline");
+    return false
   }
 
   return true;
 }
 
-function generateUniqueId() { 
-    return Date.now() - Math.floor(Math.random() * 1000)
+function generateUniqueId() {
+  return Date.now() - Math.floor(Math.random() * 1000);
 }
 
 function createNewToDo() {
   if (validateNewToDo()) {
+    const id = generateUniqueId();
+    const title = document.getElementById("newToDo-name").value;
+    const description = document.getElementById("newToDo-description").value;
+    const deadline = document.getElementById("newToDo-date").value;
+    const tags = document.getElementById("newToDo-tags").value;
+    const status = document.getElementById("newToDo-status").value;
+    const createdAt = new Date();
+    const updatedAt = createdAt;
+    const history = [{ action: "created", timestamp: createdAt }];
 
-    todoArray.push({
-        //create class todo
-    })
+    let newToDo = {
+      id: id,
+      title: title,
+      description: description,
+      deadline: deadline,
+      tags: tags,
+      status: status,
+      createdAt: createdAt,
+      updatedAt: updatedAt,
+      history: history,
+    };
+    toDoList.addToDo(newToDo)
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
+    console.log(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)));
+    closeCreationModalWindow()
   }
 }
 
+function renderToDos(){
+  for (let i = 0; i < toDoList.length; i++) {
+    toDoList[i];
+    //doka tag template
+  }
+}
+
+const createTodoButton = document.getElementById("createTodo-button");
+const creationTodoWindow = document.getElementById("createTodo-dialog");
+const cancelCreationButton = document.getElementById("closeModal");
+const acceptCreationButton = document.getElementById("acceptCreation");
+
 createTodoButton.addEventListener("click", openModalWindow);
-cancelCreationButton.addEventListener("click", closeModalWindow);
+cancelCreationButton.addEventListener("click", closeCreationModalWindow);
 acceptCreationButton.addEventListener("click", createNewToDo);
+
+const toDoList = new ToDoList();
