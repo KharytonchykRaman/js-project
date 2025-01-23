@@ -1,6 +1,6 @@
 class ToDoList {
-  constructor() {
-    this.todos = [];
+  constructor(array) {
+    this.todos = array;
   }
 
   addToDo(newToDo) {
@@ -13,7 +13,7 @@ class ToDoList {
   }
 }
 
-const LOCAL_STORAGE_KEY = 1;
+const LOCAL_STORAGE_KEY = "key";
 
 async function fetchDataWeather() {
   const response = await fetch(
@@ -93,6 +93,16 @@ function generateUniqueId() {
   return Date.now() - Math.floor(Math.random() * 1000);
 }
 
+function getToDoList(){
+  if (localStorage.getItem(LOCAL_STORAGE_KEY) === null) {
+    const newToDoList = new ToDoList([]);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newToDoList));
+  }
+
+  const result = new ToDoList(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)).todos);
+  return result;
+}
+
 function createNewToDo() {
   if (validateNewToDo()) {
     const id = generateUniqueId();
@@ -116,6 +126,7 @@ function createNewToDo() {
       updatedAt: updatedAt,
       history: history,
     };
+    const toDoList = new ToDoList(getToDoList().todos);
     toDoList.addToDo(newToDo)
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
     console.log(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)));
@@ -138,5 +149,3 @@ const acceptCreationButton = document.getElementById("acceptCreation");
 createTodoButton.addEventListener("click", openModalWindow);
 cancelCreationButton.addEventListener("click", closeCreationModalWindow);
 acceptCreationButton.addEventListener("click", createNewToDo);
-
-const toDoList = new ToDoList();
