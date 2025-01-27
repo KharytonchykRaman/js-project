@@ -24,6 +24,7 @@
       </header>
       <main class="main">
         <section class="section-1">
+
           <button id="createTodo-button">Добавить дело</button>
           <dialog id="createTodo-dialog">
             <form id="createForm" action="" method="dialog">
@@ -54,8 +55,8 @@
               <label>
                 Статус выполнения
                 <select class="modal-content" name="status" id="newToDo-status" required>
-                  <option value="pending" selected>В процессе</option>
-                  <option value="completed">Завершено</option>
+                  <option value="В процессе" selected>В процессе</option>
+                  <option value="Завершено">Завершено</option>
                 </select>
               </label>
               <div class="form-buttons-container">
@@ -64,6 +65,21 @@
               </div>
             </form>
           </dialog>
+
+          <div id="todo-container"></div>
+
+          <template id="template">          
+            <div class="todo-card">
+              <h1 id="todo-name"></h1>
+              <p id="todo-description"></p>
+              <p id="todo-deadline"></p>
+              <p id="todo-tags"></p>
+              <p id="todo-status"></p>
+              <button id="edit-todo"></button>
+              <button id="delete-todo"></button>
+            </div>
+          </template>
+            
         </section>
       </main>
     </div>

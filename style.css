@@ -52,13 +52,13 @@ button {
   margin: 40px auto 0;
   padding: 15px 30px;
   border-radius: 6px;
-  background-color:#2ecc71;
-  color:white;
+  background-color: #2ecc71;
+  color: white;
   font-size: 25px;
   border: none;
 }
 
-#createTodo-button:hover{
+#createTodo-button:hover {
   background-color: #20b65f;
 }
 
@@ -97,7 +97,7 @@ dialog {
   border: none;
 }
 
-#closeModal:hover{
+#closeModal:hover {
   background-color: #308bc8;
 }
 
@@ -109,8 +109,34 @@ dialog {
   border: none;
 }
 
-#acceptCreation:hover{
+#acceptCreation:hover {
   background-color: #20b65f;
+}
+
+#edit-todo {
+  background: url(edit-icon.png) no-repeat center center;
+  padding: 25px;
+  min-height: 30px;
+  min-width: 30px;
+}
+
+#delete-todo {
+  background: url(delete-icon.png) no-repeat center center;
+  padding: 25px;
+  min-height: 30px;
+  min-width: 30px;
+}
+
+#todo-container {
+  margin: 30px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.todo-card {
+  padding: 15px;
+  border: solid black 1px;
 }
 
 .wrapper {
