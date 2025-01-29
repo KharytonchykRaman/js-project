@@ -6,6 +6,7 @@ class ToDoList {
   addToDo(newToDo) {
     this.todos.push(newToDo);
     alert("Задача добавлена!");
+    //add to storage
   }
 
   deleteToDoById(toDoId) {
@@ -17,6 +18,7 @@ class ToDoList {
       }
     }
     return false;
+    //remove from storage
   }
 }
 
@@ -110,6 +112,8 @@ function getToDos() {
   return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)).todos;
 }
 
+//get todolist
+
 function createNewToDo() {
   if (validateNewToDo()) {
     const id = generateUniqueId();
@@ -147,6 +151,7 @@ function editToDo(id) {}
 function deleteToDo(id) {
   const toDoList = new ToDoList(getToDos());
   toDoList.deleteToDoById(id);
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
 }
 
 function initToDo(todo) {
@@ -159,7 +164,7 @@ function initToDo(todo) {
   item.querySelector(".todo-status").innerHTML = todo.status;
   const deleteButton = item.querySelector(".delete-todo");
   debugger
-  deleteButton.addEventListener("click", deleteToDo(todo.id));
+  deleteButton.addEventListener("click",function(){deleteToDo(todo.id);  renderToDosArray();} );
   return item;
 }
 
@@ -170,6 +175,8 @@ function renderToDo(todo) {
 }
 
 function renderToDosArray() {
+  const todoContainer = document.getElementById("todo-container");
+  todoContainer.innerHTML = '';
   const todosArray = getToDos();
   for (let i = 0; i < todosArray.length; i++) {
     renderToDo(todosArray[i]);
