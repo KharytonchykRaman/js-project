@@ -113,14 +113,14 @@ dialog {
   background-color: #20b65f;
 }
 
-#edit-todo {
+.edit-todo {
   background: url(edit-icon.png) no-repeat center center;
   padding: 25px;
   min-height: 30px;
   min-width: 30px;
 }
 
-#delete-todo {
+.delete-todo {
   background: url(delete-icon.png) no-repeat center center;
   padding: 25px;
   min-height: 30px;

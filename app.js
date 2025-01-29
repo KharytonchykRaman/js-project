@@ -8,8 +8,15 @@ class ToDoList {
     alert("Задача добавлена!");
   }
 
-  removeToDoById(todoId) {
-    //code
+  deleteToDoById(toDoId) {
+    for (let i = 0; i < this.todos.length; i++) {
+      if (this.todos[i].id === toDoId) {
+        this.todos.splice(i, 1);
+        alert("Задача удалена!");
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -83,7 +90,7 @@ function validateNewToDo() {
 
   if (selectedDate < today) {
     alert("wrong deadline");
-    return false
+    return false;
   }
 
   return true;
@@ -93,7 +100,7 @@ function generateUniqueId() {
   return Date.now() - Math.floor(Math.random() * 1000);
 }
 
-function getToDos(){
+function getToDos() {
   if (localStorage.getItem(LOCAL_STORAGE_KEY) === null) {
     const newToDoList = new ToDoList([]);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newToDoList));
@@ -130,29 +137,42 @@ function createNewToDo() {
     toDoList.addToDo(newToDo);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
     closeCreationModalWindow();
-    renderToDosArray();
+    renderToDo(newToDo);
   }
 }
 
-function renderToDo(todo){
-    const template = document.getElementById('template')
-    const item = template.content.cloneNode(true)
 
-    item.querySelector('#todo-name').innerHTML = todo.title;
-    item.querySelector('#todo-description').innerHTML = todo.description;
-    item.querySelector('#todo-deadline').innerHTML = todo.deadline;
-    item.querySelector('#todo-tags').innerHTML = todo.tags;
-    item.querySelector('#todo-status').innerHTML = todo.status;
+function editToDo(id) {}
 
-    return item;
+function deleteToDo(id) {
+  const toDoList = new ToDoList(getToDos());
+  toDoList.deleteToDoById(id);
 }
 
-function renderToDosArray(){
-  const todoContainer = document.getElementById('todo-container')
+function initToDo(todo) {
+  const template = document.getElementById("template");
+  const item = template.content.cloneNode(true);
+  item.querySelector(".todo-name").innerHTML = todo.title;
+  item.querySelector(".todo-description").innerHTML = todo.description;
+  item.querySelector(".todo-deadline").innerHTML = todo.deadline;
+  item.querySelector(".todo-tags").innerHTML = todo.tags;
+  item.querySelector(".todo-status").innerHTML = todo.status;
+  const deleteButton = item.querySelector(".delete-todo");
+  debugger
+  deleteButton.addEventListener("click", deleteToDo(todo.id));
+  return item;
+}
 
+function renderToDo(todo) {
+  const item = initToDo(todo);
+  const todoContainer = document.getElementById("todo-container");
+  todoContainer.append(item);
+}
+
+function renderToDosArray() {
   const todosArray = getToDos();
   for (let i = 0; i < todosArray.length; i++) {
-    todoContainer.append(renderToDo(todosArray[i]));
+    renderToDo(todosArray[i]);
   }
 }
 
@@ -165,5 +185,4 @@ createTodoButton.addEventListener("click", openModalWindow);
 cancelCreationButton.addEventListener("click", closeCreationModalWindow);
 acceptCreationButton.addEventListener("click", createNewToDo);
 
-debugger
 renderToDosArray();
