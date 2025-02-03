@@ -6,7 +6,6 @@ class ToDoList {
   addToDo(newToDo) {
     this.todos.push(newToDo);
     alert("Задача добавлена!");
-    //add to storage
   }
 
   deleteToDoById(toDoId) {
@@ -18,7 +17,15 @@ class ToDoList {
       }
     }
     return false;
-    //remove from storage
+  }
+
+  getToDoById(toDoId){
+    for (let i = 0; i < this.todos.length; i++) {
+      if (this.todos[i].id === toDoId) {
+        return this.todos[i];
+      }
+    }
+    return false;
   }
 }
 
@@ -69,8 +76,16 @@ function openModalWindow() {
   creationTodoWindow.showModal();
 }
 
+function openEditModalWindow() {
+  editTodoWindow.showModal();
+}
+
 function closeCreationModalWindow() {
   creationTodoWindow.close();
+}
+
+function closeEditModalWindow() {
+  editTodoWindow.close();
 }
 
 function validateNewToDo() {
@@ -102,17 +117,20 @@ function generateUniqueId() {
   return Date.now() - Math.floor(Math.random() * 1000);
 }
 
-function getToDos() {
+function getToDoList(){
   if (localStorage.getItem(LOCAL_STORAGE_KEY) === null) {
     const newToDoList = new ToDoList([]);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newToDoList));
-    return newToDoList.todos;
+    return newToDoList;
   }
 
-  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)).todos;
+  const toDoList = new ToDoList(JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)).todos);
+  return toDoList;
 }
 
-//get todolist
+function getToDos(){
+  return getToDoList().todos;
+}
 
 function createNewToDo() {
   if (validateNewToDo()) {
@@ -137,7 +155,7 @@ function createNewToDo() {
       updatedAt: updatedAt,
       history: history,
     };
-    const toDoList = new ToDoList(getToDos());
+    const toDoList = getToDoList();
     toDoList.addToDo(newToDo);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
     closeCreationModalWindow();
@@ -146,12 +164,28 @@ function createNewToDo() {
 }
 
 
-function editToDo(id) {}
+function editToDo(id) {
+  const todo = getToDoList().getToDoById(id);
+
+  openEditModalWindow();
+  document.getElementById("newToDo-name").value = todo.title;
+  document.getElementById("newToDo-description").value = todo.description;
+  document.getElementById("newToDo-date").value = todo.deadline;
+  document.getElementById("newToDo-tags").value = todo.tags;
+  document.getElementById("newToDo-status").value = todo.status;
+}
 
 function deleteToDo(id) {
-  const toDoList = new ToDoList(getToDos());
-  toDoList.deleteToDoById(id);
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
+    const toDoList = getToDoList();
+    toDoList.deleteToDoById(id);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
+}
+
+function confirmDeleteToDo(id){
+  let confirmation = confirm("Вы уверены, что хотите удалить задачу?");
+  if (confirmation) {
+    deleteToDo(id);
+  }
 }
 
 function initToDo(todo) {
@@ -163,8 +197,9 @@ function initToDo(todo) {
   item.querySelector(".todo-tags").innerHTML = todo.tags;
   item.querySelector(".todo-status").innerHTML = todo.status;
   const deleteButton = item.querySelector(".delete-todo");
-  debugger
-  deleteButton.addEventListener("click",function(){deleteToDo(todo.id);  renderToDosArray();} );
+  const editButton = item.querySelector(".edit-todo");
+  deleteButton.addEventListener("click",function(){confirmDeleteToDo(todo.id);  renderToDosArray();} );
+  editButton.addEventListener("click",function(){editToDo(todo.id);  renderToDosArray();} );
   return item;
 }
 
@@ -174,9 +209,13 @@ function renderToDo(todo) {
   todoContainer.append(item);
 }
 
-function renderToDosArray() {
+function clearToDoContainer(){
   const todoContainer = document.getElementById("todo-container");
   todoContainer.innerHTML = '';
+}
+
+function renderToDosArray() {
+  clearToDoContainer();
   const todosArray = getToDos();
   for (let i = 0; i < todosArray.length; i++) {
     renderToDo(todosArray[i]);
@@ -184,12 +223,21 @@ function renderToDosArray() {
 }
 
 const createTodoButton = document.getElementById("createTodo-button");
-const creationTodoWindow = document.getElementById("createTodo-dialog");
 const cancelCreationButton = document.getElementById("closeModal");
 const acceptCreationButton = document.getElementById("acceptCreation");
 
+const cancelEditButton = document.getElementById("closeEditModal");
+const acceptEditButton = document.getElementById("acceptEdit");
+
+const creationTodoWindow = document.getElementById("createTodo-dialog");
+const editTodoWindow = document.getElementById("editTodo-dialog");
+
 createTodoButton.addEventListener("click", openModalWindow);
 cancelCreationButton.addEventListener("click", closeCreationModalWindow);
+cancelEditButton.addEventListener("click", closeEditModalWindow);
 acceptCreationButton.addEventListener("click", createNewToDo);
 
 renderToDosArray();
+
+
+//edit form>label>el class name

@@ -79,7 +79,45 @@
               <button class="delete-todo"></button>
             </div>
           </template>
-            
+          <dialog id="editTodo-dialog">
+            <form id="editForm" action="" method="dialog">
+              <label>
+                Название:
+                <input class="modal-content" type="text" name="name" id="editToDo-name"
+                  placeholder="название новой задачи">
+              </label>
+
+              <label>
+                Описание:
+                <input class="modal-content" type="text" name="description" id="editToDo-description"
+                  placeholder="описание новой задачи">
+              </label>
+
+              <label>
+                Дедлайн:
+                <input class="modal-content" type="date" name="deadline" id="editToDo-date">
+              </label>
+
+              <label>
+                Теги:
+                <select class="modal-content" name="tags" id="editToDo-tags">
+                  <option value="pending" selected>В процессе</option>
+                </select>
+              </label>
+
+              <label>
+                Статус выполнения
+                <select class="modal-content" name="status" id="editToDo-status" required>
+                  <option value="В процессе" selected>В процессе</option>
+                  <option value="Завершено">Завершено</option>
+                </select>
+              </label>
+              <div class="form-buttons-container">
+                <button class="modal-content" type="reset" id="closeEditModal">Отмена</button>
+                <button class="modal-content" type="reset" id="acceptEdit">Сохранить</button>
+              </div>
+            </form>
+          </dialog>
         </section>
       </main>
     </div>

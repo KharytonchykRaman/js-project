@@ -85,7 +85,7 @@ dialog {
   gap: 15px;
 }
 
-.modal-content {
+label > * {
   padding: 7px;
 }
 
