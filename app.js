@@ -225,7 +225,7 @@ function editToDo(id) {
     todo.tags = tags;
     todo.status = status;
     todo.updatedAt = new Date();
-    todo.history.push({ action: "updated", timestamp: updatedAt });
+    todo.history.push({ action: "updated", timestamp: new Date() });
 
     const todoList = getToDoList();
     todoList.replaceToDoById(id, todo);
