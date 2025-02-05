@@ -79,19 +79,19 @@ inputTemperature();
 inputCurrency();
 
 function openCreateToDoModal() {
-  creationTodoWindow.showModal();
+  createTodoModal.showModal();
 }
 
 function openEditToDoModal() {
-  editTodoWindow.showModal();
+  editTodoModal.showModal();
 }
 
 function closeCreateToDoModal() {
-  creationTodoWindow.close();
+  createTodoModal.close();
 }
 
 function closeEditToDoModal() {
-  editTodoWindow.close();
+  editTodoModal.close();
 }
 
 function getToDoList() {
