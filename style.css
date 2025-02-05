@@ -67,14 +67,11 @@ dialog {
   border: none;
   position: fixed;
   padding: 30px;
-}
-
-#createTodo-dialog {
   width: calc(100% - 40px);
   max-width: 600px;
 }
 
-#createForm {
+.dialog-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -151,4 +148,23 @@ label > * {
 .footer {
   flex: 0 0 auto;
   background-color: darkkhaki;
+}
+
+#toast {
+  position: fixed;
+  bottom: 50px; 
+  right: -2vw;
+  transform: translateX(-50%);
+  background-color: #308bc8;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
 }

@@ -5,14 +5,12 @@ class ToDoList {
 
   addToDo(newToDo) {
     this.todos.push(newToDo);
-    alert("Задача добавлена!");
   }
 
   deleteToDoById(toDoId) {
     for (let i = 0; i < this.todos.length; i++) {
       if (this.todos[i].id === toDoId) {
         this.todos.splice(i, 1);
-        alert("Задача удалена!");
         return true;
       }
     }
@@ -26,6 +24,14 @@ class ToDoList {
       }
     }
     return false;
+  }
+
+  replaceToDoById(id, todo){
+    for (let i = 0; i < this.todos.length; i++) {
+      if (this.todos[i].id === id) {
+        this.todos.splice(i, 1, todo);
+      }
+    }
   }
 }
 
@@ -78,6 +84,27 @@ function openModalWindow() {
 
 function openEditModalWindow() {
   editTodoWindow.showModal();
+}
+
+function confirmEdit(id){
+  const todo = getElementById(id);
+
+    const title = document.getElementById("editToDo-name").value;
+    const description = document.getElementById("editToDo-description").value;
+    const deadline = document.getElementById("editToDo-date").value;
+    const tags = document.getElementById("editToDo-tags").value;
+    const status = document.getElementById("editToDo-status").value;
+
+    todo.title = title;
+    todo.description = description;
+    todo.deadline = deadline;
+    todo.tags = tags;
+    todo.status = status;
+    todo.updatedAt = new Date();
+    todo.history.push({action:"updated", timestamp: updatedAt})
+    const todoList = getToDoList();
+    todoList.replaceToDoById(id,todo);
+    closeEditModalWindow();
 }
 
 function closeCreationModalWindow() {
@@ -160,6 +187,7 @@ function createNewToDo() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
     closeCreationModalWindow();
     renderToDo(newToDo);
+    showCustomToast("Задача добавлена!");
   }
 }
 
@@ -168,11 +196,12 @@ function editToDo(id) {
   const todo = getToDoList().getToDoById(id);
 
   openEditModalWindow();
-  document.getElementById("newToDo-name").value = todo.title;
-  document.getElementById("newToDo-description").value = todo.description;
-  document.getElementById("newToDo-date").value = todo.deadline;
-  document.getElementById("newToDo-tags").value = todo.tags;
-  document.getElementById("newToDo-status").value = todo.status;
+  document.getElementById("editToDo-name").value = todo.title;
+  document.getElementById("editToDo-description").value = todo.description;
+  document.getElementById("editToDo-date").value = todo.deadline;
+  document.getElementById("editToDo-tags").value = todo.tags;
+  document.getElementById("editToDo-status").value = todo.status;
+  acceptEditButton.addEventListener("click", function(){confirmEdit(id); renderToDosArray();})
 }
 
 function deleteToDo(id) {
@@ -185,6 +214,7 @@ function confirmDeleteToDo(id){
   let confirmation = confirm("Вы уверены, что хотите удалить задачу?");
   if (confirmation) {
     deleteToDo(id);
+    showCustomToast("Задача удалена!")
   }
 }
 
@@ -222,6 +252,16 @@ function renderToDosArray() {
   }
 }
 
+function showCustomToast(message) {
+  toastElement.textContent = message;
+
+  toastElement.classList.remove('hidden');
+
+  setTimeout(() => {
+    toastElement.classList.add('hidden');
+  }, 3000); 
+}
+
 const createTodoButton = document.getElementById("createTodo-button");
 const cancelCreationButton = document.getElementById("closeModal");
 const acceptCreationButton = document.getElementById("acceptCreation");
@@ -232,12 +272,12 @@ const acceptEditButton = document.getElementById("acceptEdit");
 const creationTodoWindow = document.getElementById("createTodo-dialog");
 const editTodoWindow = document.getElementById("editTodo-dialog");
 
+const toastElement = document.getElementById('toast');
+
 createTodoButton.addEventListener("click", openModalWindow);
 cancelCreationButton.addEventListener("click", closeCreationModalWindow);
-cancelEditButton.addEventListener("click", closeEditModalWindow);
 acceptCreationButton.addEventListener("click", createNewToDo);
 
+cancelEditButton.addEventListener("click", closeEditModalWindow);
+
 renderToDosArray();
-
-
-//edit form>label>el class name
