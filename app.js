@@ -27,11 +27,8 @@ class ToDoList {
   }
 
   replaceToDoById(id, todo) {
-    for (let i = 0; i < this.todos.length; i++) {
-      if (this.todos[i].id === id) {
-        this.todos.splice(i, 1, todo);
-      }
-    }
+    const index = this.todos.findIndex(item => item.id === id);
+    this.todos[index] = todo;
   }
 }
 
@@ -210,6 +207,7 @@ function renderNewToDo() {
 }
 
 function editToDo(id) {
+  debugger
   if (validateEditedToDo()) {
     const todo = getToDoList().getToDoById(id);
 
@@ -229,7 +227,11 @@ function editToDo(id) {
 
     const todoList = getToDoList();
     todoList.replaceToDoById(id, todo);
+    uploadToDoListToLocalStorage(todoList);
+
     closeEditToDoModal();
+
+    renderLocalStorageToDosArray();
   }
 }
 
