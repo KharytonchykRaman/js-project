@@ -124,6 +124,10 @@ label > * {
   min-width: 30px;
 }
 
+#hidden-input-todoId{
+  display:none;
+}
+
 #todo-container {
   margin: 30px;
   display: flex;

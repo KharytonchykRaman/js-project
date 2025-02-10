@@ -7,27 +7,21 @@ class ToDoList {
     this.todos.push(newToDo);
   }
 
-  deleteToDoById(toDoId) {
-    for (let i = 0; i < this.todos.length; i++) {
-      if (this.todos[i].id === toDoId) {
-        this.todos.splice(i, 1);
-        return true;
-      }
-    }
-    return false;
+  deleteToDoById(id) {
+    const index = this.todos.findIndex(
+      (item) => String(item.id) === String(id)
+    );
+    this.todos.splice(index, 1);
   }
 
-  getToDoById(toDoId) {
-    for (let i = 0; i < this.todos.length; i++) {
-      if (this.todos[i].id === toDoId) {
-        return this.todos[i];
-      }
-    }
-    return false;
+  getToDoById(id) {
+    return this.todos.find((item) => String(item.id) === String(id));
   }
 
   replaceToDoById(id, todo) {
-    const index = this.todos.findIndex(item => item.id === id);
+    const index = this.todos.findIndex(
+      (item) => String(item.id) === String(id)
+    );
     this.todos[index] = todo;
   }
 }
@@ -207,8 +201,8 @@ function renderNewToDo() {
 }
 
 function editToDo(id) {
-  debugger
   if (validateEditedToDo()) {
+    debugger;
     const todo = getToDoList().getToDoById(id);
 
     const title = document.getElementById("editToDo-name").value;
@@ -244,9 +238,7 @@ function initEditToDoModal(id) {
   document.getElementById("editToDo-date").value = todo.deadline;
   document.getElementById("editToDo-tags").value = todo.tags;
   document.getElementById("editToDo-status").value = todo.status;
-  acceptEditButton.addEventListener("click", function () {
-    editToDo(id);
-  });
+  document.getElementById("hidden-input-todoId").value = todo.id;
 }
 
 function deleteToDo(id) {
@@ -284,6 +276,11 @@ function initToDoIntoTemplate(todo) {
     });
 
   return item;
+}
+
+function renderEditedToDo() {
+  const id = editTodoModal.querySelector("#hidden-input-todoId").value;
+  editToDo(id);
 }
 
 function renderToDo(todo) {
@@ -343,5 +340,7 @@ cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
 acceptCreateToDoButton.addEventListener("click", renderNewToDo);
 
 cancelEditButton.addEventListener("click", closeEditToDoModal);
+
+acceptEditButton.addEventListener("click", renderEditedToDo);
 
 renderLocalStorageToDosArray();
