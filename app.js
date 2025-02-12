@@ -26,7 +26,22 @@ class ToDoList {
   }
 }
 
-const LOCAL_STORAGE_KEY = "key";
+class TagList {
+  constructor(array) {
+    this.tags = array;
+  }
+
+  addTag(newTag) {
+    this.tags.push(newTag);
+  }
+
+  isIncludesTag(tag) {
+    return this.tags.includes(tag);
+  }
+}
+
+const LOCAL_STORAGE_TODOLIST_KEY = "todo";
+const LOCAL_STORAGE_TAGLIST_KEY = "tag";
 
 async function fetchDataWeather() {
   const response = await fetch(
@@ -70,6 +85,7 @@ inputTemperature();
 inputCurrency();
 
 function openCreateToDoModal() {
+  renderTags(createTodoModal);
   createTodoModal.showModal();
 }
 
@@ -85,15 +101,49 @@ function closeEditToDoModal() {
   editTodoModal.close();
 }
 
+function openCreateTagModal() {
+  createtagModal.showModal();
+}
+
+function closeCreateTagModal() {
+  createtagModal.close();
+}
+
+function renderTags(dialogElement){
+  const details = dialogElement.querySelector("details");
+  const tags = getTags();
+  for (let i = 0; i < array.length; i++) {
+    const element = array[i];
+    
+  }
+}
+
+function getTagList() {
+  if (localStorage.getItem(LOCAL_STORAGE_TAGLIST_KEY) === null) {
+    const newTagList = new TagList([]);
+    uploadTagListToLocalStorage(newTagList);
+    return newTagList;
+  }
+
+  const tagList = new TagList(
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_TAGLIST_KEY)).tags
+  );
+  return tagList;
+}
+
+function getTags() {
+  return getTagList().tags;
+}
+
 function getToDoList() {
-  if (localStorage.getItem(LOCAL_STORAGE_KEY) === null) {
+  if (localStorage.getItem(LOCAL_STORAGE_TODOLIST_KEY) === null) {
     const newToDoList = new ToDoList([]);
     uploadToDoListToLocalStorage(newToDoList);
     return newToDoList;
   }
 
   const toDoList = new ToDoList(
-    JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)).todos
+    JSON.parse(localStorage.getItem(LOCAL_STORAGE_TODOLIST_KEY)).todos
   );
   return toDoList;
 }
@@ -103,7 +153,11 @@ function getToDos() {
 }
 
 function uploadToDoListToLocalStorage(toDoList) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(toDoList));
+  localStorage.setItem(LOCAL_STORAGE_TODOLIST_KEY, JSON.stringify(toDoList));
+}
+
+function uploadTagListToLocalStorage(tagList) {
+  localStorage.setItem(LOCAL_STORAGE_TAGLIST_KEY, JSON.stringify(tagList));
 }
 
 function validateNewToDo() {
@@ -156,6 +210,30 @@ function validateEditedToDo() {
   return true;
 }
 
+function validateNewTag() {
+  const tagList = getTagList();
+  const newTag = document.getElementById("createTag-name").value;
+
+  if (newTag.length < 1) {
+    alert("empty name");
+    return false;
+  } else if (tagList.isIncludesTag(newTag)) {
+    alert("tag already exists");
+    return false;
+  }
+  return true;
+}
+
+function createNewTag() {
+  if (validateNewTag()) {
+    const tagName = document.getElementById("createTag-name").value;
+    const tagList = getTagList();
+    tagList.addTag(tagName);
+    uploadTagListToLocalStorage(tagList);
+    showCustomToast("Тег добавлен!");
+  }
+}
+
 function generateUniqueId() {
   return Date.now() - Math.floor(Math.random() * 1000);
 }
@@ -202,7 +280,6 @@ function renderNewToDo() {
 
 function editToDo(id) {
   if (validateEditedToDo()) {
-    debugger;
     const todo = getToDoList().getToDoById(id);
 
     const title = document.getElementById("editToDo-name").value;
@@ -323,11 +400,16 @@ const createTodoButton = document.getElementById("createTodo-button");
 const cancelCreateToDoButton = document.getElementById("closeModal");
 const acceptCreateToDoButton = document.getElementById("acceptCreation");
 
+const createTagButton = document.getElementById("createTag-button");
+const cancelCreateTagButton = document.getElementById("closeCreateTagModal");
+const acceptCreateTagButton = document.getElementById("acceptCreateTagModal");
+
 const cancelEditButton = document.getElementById("closeEditModal");
 const acceptEditButton = document.getElementById("acceptEdit");
 
 const createTodoModal = document.getElementById("createTodo-dialog");
 const editTodoModal = document.getElementById("editTodo-dialog");
+const createtagModal = document.getElementById("createTag-dialog");
 
 const toastElement = document.getElementById("toast");
 
@@ -342,5 +424,9 @@ acceptCreateToDoButton.addEventListener("click", renderNewToDo);
 cancelEditButton.addEventListener("click", closeEditToDoModal);
 
 acceptEditButton.addEventListener("click", renderEditedToDo);
+
+createTagButton.addEventListener("click", openCreateTagModal);
+cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
+acceptCreateTagButton.addEventListener("click", createNewTag);
 
 renderLocalStorageToDosArray();

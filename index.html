@@ -25,90 +25,12 @@
       <main class="main">
         <section class="section-1">
 
-          <button id="createTodo-button">Добавить дело</button>
-          <dialog id="createTodo-dialog">
-            <form id="createForm" action="" method="dialog" class="dialog-form">
-              <label>
-                Название:
-                <input class="modal-content" type="text" name="name" id="newToDo-name"
-                  placeholder="название новой задачи">
-              </label>
-
-              <label>
-                Описание:
-                <input class="modal-content" type="text" name="description" id="newToDo-description"
-                  placeholder="описание новой задачи">
-              </label>
-
-              <label>
-                Дедлайн:
-                <input class="modal-content" type="date" name="deadline" id="newToDo-date">
-              </label>
-
-              <label>
-                Теги:
-                <select class="modal-content" name="tags" id="newToDo-tags">
-                  <option value="pending" selected>В процессе</option>
-                </select>
-              </label>
-
-              <label>
-                Статус выполнения
-                <select class="modal-content" name="status" id="newToDo-status" required>
-                  <option value="В процессе" selected>В процессе</option>
-                  <option value="Завершено">Завершено</option>
-                </select>
-              </label>
-              <div class="form-buttons-container">
-                <button class="modal-content" type="reset" id="closeModal">Отмена</button>
-                <button class="modal-content" type="reset" id="acceptCreation">Сохранить</button>
-              </div>
-            </form>
-          </dialog>
+          <button class="create-button" id="createTodo-button">Добавить дело</button>
 
           <div id="todo-container"></div>
 
-          
-          <dialog id="editTodo-dialog">
-            <form id="editForm" action="" method="dialog" class="dialog-form">
-              <label>
-                Название:
-                <input class="modal-content" type="text" name="name" id="editToDo-name"
-                  placeholder="новое название задачи">
-              </label>
+          <button class="create-button" id="createTag-button">Добавить тег</button>
 
-              <label>
-                Описание:
-                <input class="modal-content" type="text" name="description" id="editToDo-description"
-                  placeholder="новое описание задачи">
-              </label>
-
-              <label>
-                Дедлайн:
-                <input class="modal-content" type="date" name="deadline" id="editToDo-date">
-              </label>
-
-              <label>
-                Теги:
-                <select class="modal-content" name="tags" id="editToDo-tags">
-                  <option value="pending" selected>В процессе</option>
-                </select>
-              </label>
-
-              <label>
-                Статус выполнения
-                <select class="modal-content" name="status" id="editToDo-status" required>
-                  <option value="В процессе" selected>В процессе</option>
-                  <option value="Завершено">Завершено</option>
-                </select>
-              </label>
-              <div class="form-buttons-container">
-                <button class="modal-content" type="reset" id="closeEditModal">Отмена</button>
-                <button class="modal-content" type="reset" id="acceptEdit">Сохранить</button>
-              </div>
-              <input type="text" id="hidden-input-todoId">
-            </form>
-          </dialog>
         </section>
       </main>
     </div>
@@ -117,13 +39,11 @@
     </footer>
   </div>
 
-
-
   <!-- toast messages -->
   <div id="toast" class="hidden"></div>
 
   <!-- template -->
-  <template id="template">          
+  <template id="template">
     <div class="todo-card">
       <h1 class="todo-name"></h1>
       <p class="todo-description"></p>
@@ -133,7 +53,110 @@
       <button class="edit-todo-button"></button>
       <button class="delete-todo-button"></button>
     </div>
-  </template> 
+  </template>
+
+  <!-- create todo modal -->
+  <dialog id="createTodo-dialog">
+    <form id="createForm" action="" method="dialog" class="dialog-form">
+      <label>
+        Название:
+        <input class="modal-content" type="text" name="name" id="newToDo-name" placeholder="название новой задачи">
+      </label>
+
+      <label>
+        Описание:
+        <input class="modal-content" type="text" name="description" id="newToDo-description"
+          placeholder="описание новой задачи">
+      </label>
+
+      <label>
+        Дедлайн:
+        <input class="modal-content" type="date" name="deadline" id="newToDo-date">
+      </label>
+
+      <label>
+        Теги:
+        <select class="modal-content" name="tags" id="newToDo-tags">
+          <option value="pending" selected>В процессе</option>
+        </select>
+      </label>
+
+      <label>
+        <details>
+          <summary>Выберите теги</summary>
+          <summary>Вариант 1<input type="checkbox" value="Вариант 1"></summary>
+        </details>
+      </label>
+
+      <label>
+        Статус выполнения
+        <select class="modal-content" name="status" id="newToDo-status" required>
+          <option value="В процессе" selected>В процессе</option>
+          <option value="Завершено">Завершено</option>
+        </select>
+      </label>
+      <div class="form-buttons-container">
+        <button class="modal-content" type="reset" id="closeModal">Отмена</button>
+        <button class="modal-content" type="reset" id="acceptCreation">Сохранить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- edit todo modal -->
+  <dialog id="editTodo-dialog">
+    <form id="editForm" action="" method="dialog" class="dialog-form">
+      <label>
+        Название:
+        <input class="modal-content" type="text" name="name" id="editToDo-name" placeholder="новое название задачи">
+      </label>
+
+      <label>
+        Описание:
+        <input class="modal-content" type="text" name="description" id="editToDo-description"
+          placeholder="новое описание задачи">
+      </label>
+
+      <label>
+        Дедлайн:
+        <input class="modal-content" type="date" name="deadline" id="editToDo-date">
+      </label>
+
+      <label>
+        Теги:
+        <select class="modal-content" name="tags" id="editToDo-tags">
+          <option value="pending" selected>В процессе</option>
+        </select>
+      </label>
+
+      <label>
+        Статус выполнения
+        <select class="modal-content" name="status" id="editToDo-status" required>
+          <option value="В процессе" selected>В процессе</option>
+          <option value="Завершено">Завершено</option>
+        </select>
+      </label>
+      <div class="form-buttons-container">
+        <button class="modal-content" type="reset" id="closeEditModal">Отмена</button>
+        <button class="modal-content" type="reset" id="acceptEdit">Сохранить</button>
+      </div>
+      <input type="text" id="hidden-input-todoId">
+    </form>
+  </dialog>
+
+  <!-- create tag modal -->
+  <dialog id="createTag-dialog">
+    <form id="createTagForm" action="" method="dialog" class="dialog-form">
+      <label>
+        Название:
+        <input class="modal-content" type="text" name="name" id="createTag-name" placeholder="название нового тега">
+      </label>
+
+      <div class="form-buttons-container">
+        <button class="modal-content" type="reset" id="closeCreateTagModal">Отмена</button>
+        <button class="modal-content" type="reset" id="acceptCreateTagModal">Сохранить</button>
+      </div>
+    </form>
+  </dialog>
 
 </body>
 
