@@ -85,7 +85,6 @@ inputTemperature();
 inputCurrency();
 
 function openCreateToDoModal() {
-  renderTags(createTodoModal);
   createTodoModal.showModal();
 }
 
@@ -109,13 +108,27 @@ function closeCreateTagModal() {
   createtagModal.close();
 }
 
-function renderTags(dialogElement){
-  const details = dialogElement.querySelector("details");
+function clearTags() {
+  createTodoModalDetails.innerHTML = "<summary>choose tags</summary>";
+  editTodoModalDetails.innerHTML = "<summary>choose tags</summary>";
+}
+
+function renderTags() {
+  clearTags();
+
   const tags = getTags();
-  for (let i = 0; i < array.length; i++) {
-    const element = array[i];
-    
-  }
+  tags.forEach((tag) => {
+    const summary = document.createElement("summary");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = tag;
+    summary.appendChild(document.createTextNode(tag));
+    summary.appendChild(checkbox);
+
+    const clonedSummary = summary.cloneNode(true);
+    createTodoModalDetails.appendChild(summary);
+    editTodoModalDetails.appendChild(clonedSummary);
+  });
 }
 
 function getTagList() {
@@ -231,6 +244,8 @@ function createNewTag() {
     tagList.addTag(tagName);
     uploadTagListToLocalStorage(tagList);
     showCustomToast("Тег добавлен!");
+    closeCreateTagModal();
+    renderTags();
   }
 }
 
@@ -275,6 +290,7 @@ function renderNewToDo() {
 
     closeCreateToDoModal();
     showCustomToast("Задача добавлена!");
+    logCheckedItems();
   }
 }
 
@@ -418,6 +434,7 @@ const todoContainer = document.getElementById("todo-container");
 const template = document.getElementById("template");
 
 createTodoButton.addEventListener("click", openCreateToDoModal);
+
 cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
 acceptCreateToDoButton.addEventListener("click", renderNewToDo);
 
@@ -429,4 +446,17 @@ createTagButton.addEventListener("click", openCreateTagModal);
 cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
 acceptCreateTagButton.addEventListener("click", createNewTag);
 
+const createTodoModalDetails = createTodoModal.querySelector("details");
+const editTodoModalDetails = editTodoModal.querySelector("details");
+
 renderLocalStorageToDosArray();
+renderTags();
+
+function logCheckedItems() {
+  const checkboxes = createTodoModal.querySelectorAll('input[type="checkbox"]');
+  checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+          console.log(checkbox.previousElementSibling.value);
+      }
+  });
+}
