@@ -113,7 +113,7 @@ function clearTags() {
   editTodoModalDetails.innerHTML = "<summary>choose tags</summary>";
 }
 
-function renderTags() {
+function renderTagsIntoModals() {
   clearTags();
 
   const tags = getTags();
@@ -173,50 +173,42 @@ function uploadTagListToLocalStorage(tagList) {
   localStorage.setItem(LOCAL_STORAGE_TAGLIST_KEY, JSON.stringify(tagList));
 }
 
-function validateNewToDo() {
-  if (document.getElementById("newToDo-name").value.length < 1) {
-    alert("empty name");
-    return false;
-  } else if (document.getElementById("newToDo-date").value.length < 1) {
-    alert("empty date");
-    return false;
-  } else if (document.getElementById("newToDo-tags").value.length < 1) {
-    alert("empty tags");
-    return false;
-  }
-
-  const selectedDate = new Date(document.getElementById("newToDo-date").value);
-  const today = new Date();
-
-  today.setHours(0, 0, 0, 0);
-
-  if (selectedDate < today) {
-    alert("wrong deadline");
-    return false;
-  }
-
-  return true;
+function isNameValid(name) {
+  return name.trim().length > 0;
 }
 
-function validateEditedToDo() {
-  if (document.getElementById("editToDo-name").value.length < 1) {
+function isDateValid(date) {
+  const selectedDate = new Date(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return !isNaN(selectedDate) && selectedDate >= today;
+}
+
+function areTagsValid(tags) {
+  return tags.length > 0;
+}
+
+function doesTagExist(tagList, tag) {
+  return !tagList.isIncludesTag(tag);
+}
+
+function validateNewToDo() {
+  const name = document.getElementById("newToDo-name").value;
+  const date = document.getElementById("newToDo-date").value;
+  const tags = getCheckedTags(createTodoModal);
+
+  if (!isNameValid(name)) {
     alert("empty name");
-    return false;
-  } else if (document.getElementById("editToDo-date").value.length < 1) {
-    alert("empty date");
-    return false;
-  } else if (document.getElementById("editToDo-tags").value.length < 1) {
-    alert("empty tags");
     return false;
   }
 
-  const selectedDate = new Date(document.getElementById("editToDo-date").value);
-  const today = new Date();
-
-  today.setHours(0, 0, 0, 0);
-
-  if (selectedDate < today) {
+  if (!isDateValid(date)) {
     alert("wrong deadline");
+    return false;
+  }
+
+  if (!areTagsValid(tags)) {
+    alert("empty tags");
     return false;
   }
 
@@ -227,13 +219,39 @@ function validateNewTag() {
   const tagList = getTagList();
   const newTag = document.getElementById("createTag-name").value;
 
-  if (newTag.length < 1) {
+  if (!isNameValid(newTag)) {
     alert("empty name");
     return false;
-  } else if (tagList.isIncludesTag(newTag)) {
+  }
+
+  if (!doesTagExist(tagList, newTag)) {
     alert("tag already exists");
     return false;
   }
+
+  return true;
+}
+
+function validateEditedToDo() {
+  const name = document.getElementById("editToDo-name").value;
+  const date = document.getElementById("editToDo-date").value;
+  const tags = getCheckedTags(editTodoModal);
+
+  if (!isNameValid(name)) {
+    alert("empty name");
+    return false;
+  }
+
+  if (!isDateValid(date)) {
+    alert("wrong deadline");
+    return false;
+  }
+
+  if (!areTagsValid(tags)) {
+    alert("empty tags");
+    return false;
+  }
+
   return true;
 }
 
@@ -245,7 +263,7 @@ function createNewTag() {
     uploadTagListToLocalStorage(tagList);
     showCustomToast("Тег добавлен!");
     closeCreateTagModal();
-    renderTags();
+    renderTagsIntoModals();
   }
 }
 
@@ -258,7 +276,7 @@ function createNewToDo() {
   const title = document.getElementById("newToDo-name").value;
   const description = document.getElementById("newToDo-description").value;
   const deadline = document.getElementById("newToDo-date").value;
-  const tags = document.getElementById("newToDo-tags").value;
+  const tags = getCheckedTags(createTodoModal);
   const status = document.getElementById("newToDo-status").value;
   const createdAt = new Date();
   const updatedAt = createdAt;
@@ -290,7 +308,6 @@ function renderNewToDo() {
 
     closeCreateToDoModal();
     showCustomToast("Задача добавлена!");
-    logCheckedItems();
   }
 }
 
@@ -301,7 +318,7 @@ function editToDo(id) {
     const title = document.getElementById("editToDo-name").value;
     const description = document.getElementById("editToDo-description").value;
     const deadline = document.getElementById("editToDo-date").value;
-    const tags = document.getElementById("editToDo-tags").value;
+    const tags = getCheckedTags(editTodoModal);
     const status = document.getElementById("editToDo-status").value;
 
     todo.title = title;
@@ -317,21 +334,36 @@ function editToDo(id) {
     uploadToDoListToLocalStorage(todoList);
 
     closeEditToDoModal();
-
     renderLocalStorageToDosArray();
+    showCustomToast("Задача обновлена!");
   }
+}
+
+function chooseCheckboxesEditModal(todo) {
+  const details = editTodoModal.querySelector("details");
+  const checkboxes = details.querySelectorAll('input[type="checkbox"]');
+
+  checkboxes.forEach((checkbox) => {
+    if (todo.tags.includes(checkbox.value)) {
+      checkbox.checked = true;
+    } else {
+      checkbox.checked = false;
+    }
+  });
 }
 
 function initEditToDoModal(id) {
   const todo = getToDoList().getToDoById(id);
 
   openEditToDoModal();
+
   document.getElementById("editToDo-name").value = todo.title;
   document.getElementById("editToDo-description").value = todo.description;
   document.getElementById("editToDo-date").value = todo.deadline;
-  document.getElementById("editToDo-tags").value = todo.tags;
   document.getElementById("editToDo-status").value = todo.status;
   document.getElementById("hidden-input-todoId").value = todo.id;
+
+  chooseCheckboxesEditModal(todo);
 }
 
 function deleteToDo(id) {
@@ -450,13 +482,15 @@ const createTodoModalDetails = createTodoModal.querySelector("details");
 const editTodoModalDetails = editTodoModal.querySelector("details");
 
 renderLocalStorageToDosArray();
-renderTags();
+renderTagsIntoModals();
 
-function logCheckedItems() {
-  const checkboxes = createTodoModal.querySelectorAll('input[type="checkbox"]');
-  checkboxes.forEach(checkbox => {
-      if (checkbox.checked) {
-          console.log(checkbox.previousElementSibling.value);
-      }
-  });
+function getCheckedTags(modalWindow) {
+  let checkboxes = modalWindow.querySelectorAll('input[type="checkbox"]');
+  let checkedCheckboxes = Array.from(checkboxes).filter(
+    (checkbox) => checkbox.checked
+  );
+  let parentTexts = checkedCheckboxes.map((checkbox) =>
+    checkbox.parentElement.textContent.trim()
+  );
+  return parentTexts;
 }
