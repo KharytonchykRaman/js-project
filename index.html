@@ -27,6 +27,16 @@
 
           <button class="create-button" id="createTodo-button">Добавить дело</button>
 
+          <div class="sort-dropdown">
+            <button class="dropdown-button" id="sort-dropdown-button">
+              <img src="icons8-sort-100.png" alt="" class="icon"> Сортировка</button>
+            <ul class="sort-options" id="sort-options-list">
+              <li data-value="date">По дате создания</li>
+              <li data-value="name">По алфавиту</li>
+              <li data-value="priority">По приоритету</li>
+            </ul>
+          </div>
+
           <div id="todo-container"></div>
 
           <button class="create-button" id="createTag-button">Добавить тег</button>
@@ -74,7 +84,7 @@
         <input class="modal-content" type="date" name="deadline" id="newToDo-date">
       </label>
 
-      <details class="tags">  
+      <details class="tags">
       </details>
 
       <label>
@@ -110,7 +120,7 @@
         <input class="modal-content" type="date" name="deadline" id="editToDo-date">
       </label>
 
-      <details class="tags">  
+      <details class="tags">
       </details>
 
       <label>

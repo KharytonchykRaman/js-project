@@ -494,3 +494,49 @@ function getCheckedTags(modalWindow) {
   );
   return parentTexts;
 }
+
+const sortButton = document.getElementById("sort-dropdown-button");
+const optionsList = document.getElementById("sort-options-list");
+
+sortButton.addEventListener("click", () => {
+    optionsList.style.display = optionsList.style.display === "block" ? "none" : "block";
+});
+
+optionsList.addEventListener("click", (event) => {
+    if (event.target.tagName === "LI") {
+        const selectedValue = event.target.getAttribute("data-value");
+        const selectedText = event.target.textContent;
+
+        sortButton.innerHTML = `<img src="icons8-sort-100.png" alt="" class="icon"> ${selectedText}`;
+        
+        optionsList.style.display = "none";
+
+        renderSortedTodos(selectedValue);
+    }
+});
+
+function renderSortedTodos(selectedValue){
+  if (selectedValue === "date") {
+    sortTodosByDate();
+  }
+  else if (selectedValue === "name") {
+    sortTodosByName();
+  }
+  else{
+    sortTodosByPriority();
+  }
+
+  //renderToDosArray()
+}
+
+function sortTodosByDate(){
+  const todos = getToDos();
+}
+
+function sortTodosByName(){
+  const todos = getToDos();
+}
+
+function sortTodosByPriority(){
+  const todos = getToDos();
+}

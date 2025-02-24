@@ -62,20 +62,15 @@ button {
   background-color: #20b65f;
 }
 
-/* #createTodo-button {
-  display: block;
-  margin: 40px auto 0;
-  padding: 15px 30px;
-  border-radius: 6px;
-  background-color: #2ecc71;
-  color: white;
-  font-size: 25px;
-  border: none;
-} */
+.sort-icon{
+  width:15px;
+  height: 15px;
+}
 
-/* #createTodo-button:hover {
-  background-color: #20b65f;
-} */
+.filter-icon{
+  width:15px;
+  height: 15px;
+}
 
 dialog {
   margin: auto;
@@ -195,4 +190,56 @@ label > * {
 summary {
   cursor: pointer;
   user-select: none;
+}
+
+.sort-dropdown {
+  position: relative;
+  width: 200px;
+  margin: 20px;
+}
+
+.dropdown-button {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-button .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.sort-options {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+}
+
+.sort-options li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.sort-options li:hover {
+  background-color: #f0f0f0;
+}
+
+.sort-options li .icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 }
