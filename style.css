@@ -62,16 +62,6 @@ button {
   background-color: #20b65f;
 }
 
-.sort-icon{
-  width:15px;
-  height: 15px;
-}
-
-.filter-icon{
-  width:15px;
-  height: 15px;
-}
-
 dialog {
   margin: auto;
   border: none;
@@ -192,7 +182,7 @@ summary {
   user-select: none;
 }
 
-.sort-dropdown {
+.sort-dropdown, .filter-dropdown {
   position: relative;
   width: 200px;
   margin: 20px;
@@ -213,7 +203,7 @@ summary {
   margin-right: 10px;
 }
 
-.sort-options {
+.sort-options, .filter-options {
   display: none;
   position: absolute;
   top: 100%;
@@ -227,19 +217,13 @@ summary {
   z-index: 10;
 }
 
-.sort-options li {
+.sort-options, .filter-options li {
   padding: 10px;
   display: flex;
   align-items: center;
   cursor: pointer;
 }
 
-.sort-options li:hover {
+.sort-options, .filter-options li:hover {
   background-color: #f0f0f0;
-}
-
-.sort-options li .icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 10px;
 }

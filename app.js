@@ -496,47 +496,90 @@ function getCheckedTags(modalWindow) {
 }
 
 const sortButton = document.getElementById("sort-dropdown-button");
-const optionsList = document.getElementById("sort-options-list");
+const sortOptionsList = document.getElementById("sort-options-list");
 
-sortButton.addEventListener("click", () => {
-    optionsList.style.display = optionsList.style.display === "block" ? "none" : "block";
+sortButton.addEventListener("click", (event) => {
+  event.stopPropagation()
+  sortOptionsList.style.display =
+    sortOptionsList.style.display === "block" ? "none" : "block";
 });
 
-optionsList.addEventListener("click", (event) => {
-    if (event.target.tagName === "LI") {
-        const selectedValue = event.target.getAttribute("data-value");
-        const selectedText = event.target.textContent;
+sortOptionsList.addEventListener("click", (event) => {
+  if (event.target.tagName === "LI") {
+    const selectedValue = event.target.getAttribute("data-value");
+    const selectedText = event.target.textContent;
 
-        sortButton.innerHTML = `<img src="icons8-sort-100.png" alt="" class="icon"> ${selectedText}`;
-        
-        optionsList.style.display = "none";
+    sortButton.innerHTML = `<img src="icons8-sort-100.png" alt="" class="icon"> ${selectedText}`;
 
-        renderSortedTodos(selectedValue);
-    }
+    sortOptionsList.style.display = "none";
+
+    renderSortedTodos(selectedValue);
+  }
 });
 
-function renderSortedTodos(selectedValue){
-  if (selectedValue === "date") {
-    sortTodosByDate();
+document.addEventListener("click", (event) => {
+  if (sortOptionsList.style.display === "block" && !sortOptionsList.contains(event.target) && !sortButton.contains(event.target)) {
+    sortOptionsList.style.display = "none";
   }
-  else if (selectedValue === "name") {
-    sortTodosByName();
+});
+
+function renderSortedTodos(selectedValue) {
+  let resultArray = [];
+  if (selectedValue === "createDate") {
+    resultArray = sortTodosByDate();
+  } else if (selectedValue === "name") {
+    resultArray = sortTodosByName();
+  } else {
+    resultArray = sortTodosByPriority();
   }
-  else{
-    sortTodosByPriority();
+
+  renderToDosArray(resultArray);
+}
+
+function sortTodosByDate() {
+  const todos = getToDos();
+
+  todos.sort(
+    (todo1, todo2) => new Date(todo1.createdAt) - new Date(todo2.createdAt)
+  );
+
+  return todos;
+}
+
+function sortTodosByName() {
+  const todos = getToDos();
+
+  todos.sort((todo1, todo2) =>
+    todo1.title.localeCompare(todo2.title, undefined, { sensitivity: "base" })
+  );
+
+  return todos;
+}
+
+function sortTodosByPriority() {
+  const todos = getToDos();
+
+  return todos;
+}
+
+const filterButton = document.getElementById("filter-dropdown-button");
+const filterOptionsList = document.getElementById("filter-options-list");
+
+filterButton.addEventListener("click", (event) => {
+  event.stopPropagation()
+  filterOptionsList.style.display =
+    filterOptionsList.style.display === "block" ? "none" : "block";
+});
+
+filterOptionsList.addEventListener("click", (event) => {
+  if (event.target.tagName === "LI") {
+    const selectedValue = event.target.getAttribute("data-value");
+    const selectedText = event.target.textContent;
+
+    filterButton.innerHTML = `<img src="icons8-filter-100.png" alt="" class="icon"> ${selectedText}`;
+
+    filterOptionsList.style.display = "none";
+
+    //https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_dropdown_multilevel_css&stacked=h
   }
-
-  //renderToDosArray()
-}
-
-function sortTodosByDate(){
-  const todos = getToDos();
-}
-
-function sortTodosByName(){
-  const todos = getToDos();
-}
-
-function sortTodosByPriority(){
-  const todos = getToDos();
-}
+});
