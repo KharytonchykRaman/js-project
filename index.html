@@ -41,10 +41,40 @@
             <button class="dropdown-button" id="filter-dropdown-button">
               <img src="icons8-filter-100.png" alt="" class="icon"> Фильтрация</button>
             <ul class="filter-options" id="filter-options-list">
-              <li data-value="status">По статусу</li>
-              <li data-value="tag">По тегам</li>
-              <li data-value="createDate">По дате создания</li>
-              <li data-value="dealine">По дедлайну</li>
+
+              <button class="dropdown-button" id="status-dropdown-button">По статусу</button>
+                <select class="filter-status-options" id="filter-status-options">
+                  <option value="В процессе">В процессе</option>
+                  <option value="Завершено">Завершено</option>
+                </select>
+
+              <button class="dropdown-button" id="tags-dropdown-button">По тегам</button>
+              
+
+              <button class="dropdown-button" id="createDate-dropdown-button">По дате создания</button>
+              <li class="filter-options" id="filter-createDate-dropdown">
+                <label>
+                  До:
+                  <input type="date" id="filter-createDate-before-input">
+                </label>
+                <label>
+                  После:
+                  <input type="date" id="filter-createDate-after-input">
+                </label>
+              </li>
+
+              <button class="dropdown-button" id="deadline-dropdown-button">По дедлайну</button>
+              <li class="filter-options" id="filter-deadline-dropdown">
+                <label>
+                  До:
+                  <input type="date" id="filter-deadline-before-dropdown">
+                </label>
+                <label>
+                  После:
+                  <input type="date" id="filter-deadline-after-dropdown">
+                </label>
+              </li>
+
             </ul>
           </div>
 
@@ -95,8 +125,9 @@
         <input class="modal-content" type="date" name="deadline" id="newToDo-date">
       </label>
 
-      <details class="tags">
-      </details>
+      <div class="tags-dropdown" id="create-modal-tags-dropdown">
+        <button class="dropdown-button" id="create-modal-dropdown-button">Теги</button>
+      </div>
 
       <label>
         Статус выполнения

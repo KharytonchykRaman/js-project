@@ -131,6 +131,25 @@ function renderTagsIntoModals() {
   });
 }
 
+function createTagsDropdownUl() {
+  const ul = document.createElement('ul');
+
+  const tags = getTags();
+
+  tags.forEach(tag => {
+    const li = document.createElement('li')
+    li.innerHTML = String(tag);
+    ul.appent(li);
+})
+  return ul;
+}
+
+function renderTagsDropdownUlIntoElem(elem){
+  const ul = createTagsDropdownUl();
+
+  elem.append(ul);
+}
+
 function getTagList() {
   if (localStorage.getItem(LOCAL_STORAGE_TAGLIST_KEY) === null) {
     const newTagList = new TagList([]);
@@ -481,6 +500,13 @@ acceptCreateTagButton.addEventListener("click", createNewTag);
 const createTodoModalDetails = createTodoModal.querySelector("details");
 const editTodoModalDetails = editTodoModal.querySelector("details");
 
+const createModalDropdownButton = document.getElementById("create-modal-dropdown-button");
+const createModalDropdown = document.getElementById('create-modal-tags-dropdown');
+
+createModalDropdownButton.addEventListener('click', ()=> {
+  renderTagsDropdownUlIntoElem(createModalDropdown);
+})
+
 renderLocalStorageToDosArray();
 renderTagsIntoModals();
 
@@ -579,7 +605,82 @@ filterOptionsList.addEventListener("click", (event) => {
     filterButton.innerHTML = `<img src="icons8-filter-100.png" alt="" class="icon"> ${selectedText}`;
 
     filterOptionsList.style.display = "none";
-
-    //https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_dropdown_multilevel_css&stacked=h
   }
 });
+
+const statusDropdownButton = document.getElementById("status-dropdown-button");
+const statusDropdown = document.getElementById("filter-status-options");
+
+
+statusDropdownButton.addEventListener('click',() => {
+  statusDropdown.style.display =
+  statusDropdown.style.display === "block" ? "none" : "block";
+})
+
+
+/* <style>
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content label {
+            padding: 12px 16px;
+            display: block;
+            cursor: pointer;
+        }
+
+        .dropdown-content label:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dropdown">
+    <button class="dropbtn">Выбрать пункты</button>
+    <div class="dropdown-content" id="dropdown-content">
+        <!-- Элементы будут добавлены здесь -->
+    </div>
+</div>
+
+<script>
+    const items = ["Пункт 1", "Пункт 2", "Пункт 3", "Пункт 4"]; // Ваш массив строк
+    const dropdownContent = document.getElementById('dropdown-content');
+
+    items.forEach((item, index) => {
+        const label = document.createElement('label');
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = `option${index + 1}`;
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(` ${item}`));
+        dropdownContent.appendChild(label);
+    });
+
+    const checkboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const selectedValues = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    selectedValues.push(cb.value);
+                }
+            });
+            console.log('Выбранные значения:', selectedValues);
+        });
+    });
+</script>*/
