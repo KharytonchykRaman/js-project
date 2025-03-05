@@ -43,6 +43,96 @@ class TagList {
 const LOCAL_STORAGE_TODOLIST_KEY = "todo";
 const LOCAL_STORAGE_TAGLIST_KEY = "tag";
 
+const tempDiv = document.getElementById("weather");
+const currDiv = document.getElementById("currency");
+
+const createTodoButton = document.getElementById("createTodo-button");
+const cancelCreateToDoButton = document.getElementById("closeModal");
+const acceptCreateToDoButton = document.getElementById("acceptCreation");
+
+const createTagButton = document.getElementById("createTag-button");
+const cancelCreateTagButton = document.getElementById("closeCreateTagModal");
+const acceptCreateTagButton = document.getElementById("acceptCreateTagModal");
+
+const cancelEditButton = document.getElementById("closeEditModal");
+const acceptEditButton = document.getElementById("acceptEdit");
+
+const createTodoModal = document.getElementById("createTodo-dialog");
+const editTodoModal = document.getElementById("editTodo-dialog");
+const createTagModal = document.getElementById("createTag-dialog");
+
+const toastElement = document.getElementById("toast");
+
+const todoContainer = document.getElementById("todo-container");
+
+const template = document.getElementById("template");
+
+const sortButton = document.getElementById("sort-dropdown-button");
+const sortOptionsList = document.getElementById("sort-options-list");
+
+const createModalDropdownButton = document.getElementById(
+  "create-modal-tags-dropdown-button"
+);
+const createModalDropdownContent = document.getElementById(
+  "create-modal-tags-dropdown-content"
+);
+
+createModalDropdownButton.addEventListener("click", () => {
+  switchDisplay(createModalDropdownContent);
+});
+
+const editModalDropdownButton = document.getElementById(
+  "edit-modal-tags-dropdown-button"
+);
+const editModalDropdownContent = document.getElementById(
+  "edit-modal-tags-dropdown-content"
+);
+
+editModalDropdownButton.addEventListener('click',()=>{
+  switchDisplay(editModalDropdownContent);
+})
+
+createTodoButton.addEventListener("click", openCreateToDoModal);
+
+cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
+acceptCreateToDoButton.addEventListener("click", renderNewToDo);
+
+cancelEditButton.addEventListener("click", closeEditToDoModal);
+
+acceptEditButton.addEventListener("click", renderEditedToDo);
+
+createTagButton.addEventListener("click", openCreateTagModal);
+cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
+acceptCreateTagButton.addEventListener("click", createNewTag);
+
+sortButton.addEventListener("click", (event) => {
+  event.stopPropagation();
+  switchDisplay(sortOptionsList);
+});
+
+sortOptionsList.addEventListener("click", (event) => {
+  if (event.target.tagName === "LI") {
+    const selectedValue = event.target.getAttribute("data-value");
+    const selectedText = event.target.textContent;
+
+    sortButton.innerHTML = `<img src="icons8-sort-100.png" alt="" class="icon"> ${selectedText}`;
+
+    sortOptionsList.style.display = "none";
+
+    renderSortedTodos(selectedValue);
+  }
+});
+
+document.addEventListener("click", (event) => {
+  if (
+    sortOptionsList.style.display === "block" &&
+    !sortOptionsList.contains(event.target) &&
+    !sortButton.contains(event.target)
+  ) {
+    sortOptionsList.style.display = "none";
+  }
+});
+
 async function fetchDataWeather() {
   const response = await fetch(
     "https://api.openweathermap.org/data/2.5/weather?q=Minsk&appid=1ea453f5501c528eb93b8765879e5373"
@@ -71,24 +161,23 @@ async function getCurrency() {
 
 async function inputTemperature() {
   let temperature = await getTemperature();
-  const tempDiv = document.getElementById("weather");
   tempDiv.append(temperature);
 }
 
 async function inputCurrency() {
   let currency = await getCurrency();
-  const currDiv = document.getElementById("currency");
   currDiv.append(currency);
 }
 
-inputTemperature();
-inputCurrency();
-
 function openCreateToDoModal() {
+  clearEl(createModalDropdownContent);
+  renderTagsDropdown(createModalDropdownContent);
   createTodoModal.showModal();
 }
 
 function openEditToDoModal() {
+  clearEl(editModalDropdownContent);
+  renderTagsDropdown(editModalDropdownContent);
   editTodoModal.showModal();
 }
 
@@ -101,53 +190,25 @@ function closeEditToDoModal() {
 }
 
 function openCreateTagModal() {
-  createtagModal.showModal();
+  createTagModal.showModal();
 }
 
 function closeCreateTagModal() {
-  createtagModal.close();
+  createTagModal.close();
 }
 
-function clearTags() {
-  createTodoModalDetails.innerHTML = "<summary>choose tags</summary>";
-  editTodoModalDetails.innerHTML = "<summary>choose tags</summary>";
-}
-
-function renderTagsIntoModals() {
-  clearTags();
-
+function renderTagsDropdown(parentEl) {
   const tags = getTags();
+
   tags.forEach((tag) => {
-    const summary = document.createElement("summary");
+    const label = document.createElement("label");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.value = tag;
-    summary.appendChild(document.createTextNode(tag));
-    summary.appendChild(checkbox);
-
-    const clonedSummary = summary.cloneNode(true);
-    createTodoModalDetails.appendChild(summary);
-    editTodoModalDetails.appendChild(clonedSummary);
+    label.appendChild(checkbox);
+    label.appendChild(document.createTextNode(tag));
+    parentEl.appendChild(label);
   });
-}
-
-function createTagsDropdownUl() {
-  const ul = document.createElement('ul');
-
-  const tags = getTags();
-
-  tags.forEach(tag => {
-    const li = document.createElement('li')
-    li.innerHTML = String(tag);
-    ul.appent(li);
-})
-  return ul;
-}
-
-function renderTagsDropdownUlIntoElem(elem){
-  const ul = createTagsDropdownUl();
-
-  elem.append(ul);
 }
 
 function getTagList() {
@@ -282,7 +343,6 @@ function createNewTag() {
     uploadTagListToLocalStorage(tagList);
     showCustomToast("Тег добавлен!");
     closeCreateTagModal();
-    renderTagsIntoModals();
   }
 }
 
@@ -291,26 +351,16 @@ function generateUniqueId() {
 }
 
 function createNewToDo() {
-  const id = generateUniqueId();
-  const title = document.getElementById("newToDo-name").value;
-  const description = document.getElementById("newToDo-description").value;
-  const deadline = document.getElementById("newToDo-date").value;
-  const tags = getCheckedTags(createTodoModal);
-  const status = document.getElementById("newToDo-status").value;
-  const createdAt = new Date();
-  const updatedAt = createdAt;
-  const history = [{ action: "created", timestamp: createdAt }];
-
   let newToDo = {
-    id: id,
-    title: title,
-    description: description,
-    deadline: deadline,
-    tags: tags,
-    status: status,
-    createdAt: createdAt,
-    updatedAt: updatedAt,
-    history: history,
+    id: generateUniqueId(),
+    title: document.getElementById("newToDo-name").value,
+    description: document.getElementById("newToDo-description").value,
+    deadline: document.getElementById("newToDo-date").value,
+    tags: getCheckedTags(createTodoModal),
+    status: document.getElementById("newToDo-status").value,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    history: [{ action: "created", timestamp: new Date() }],
   };
 
   return newToDo;
@@ -334,17 +384,11 @@ function editToDo(id) {
   if (validateEditedToDo()) {
     const todo = getToDoList().getToDoById(id);
 
-    const title = document.getElementById("editToDo-name").value;
-    const description = document.getElementById("editToDo-description").value;
-    const deadline = document.getElementById("editToDo-date").value;
-    const tags = getCheckedTags(editTodoModal);
-    const status = document.getElementById("editToDo-status").value;
-
-    todo.title = title;
-    todo.description = description;
-    todo.deadline = deadline;
-    todo.tags = tags;
-    todo.status = status;
+    todo.title = document.getElementById("editToDo-name").value;
+    todo.description = document.getElementById("editToDo-description").value;
+    todo.deadline = document.getElementById("editToDo-date").value;
+    todo.tags = getCheckedTags(editTodoModal);
+    todo.status = document.getElementById("editToDo-status").value;
     todo.updatedAt = new Date();
     todo.history.push({ action: "updated", timestamp: new Date() });
 
@@ -359,8 +403,9 @@ function editToDo(id) {
 }
 
 function chooseCheckboxesEditModal(todo) {
-  const details = editTodoModal.querySelector("details");
-  const checkboxes = details.querySelectorAll('input[type="checkbox"]');
+  const checkboxes = editModalDropdownContent.querySelectorAll(
+    'input[type="checkbox"]'
+  );
 
   checkboxes.forEach((checkbox) => {
     if (todo.tags.includes(checkbox.value)) {
@@ -432,21 +477,18 @@ function renderToDo(todo) {
   todoContainer.append(item);
 }
 
-function clearToDoContainer() {
-  todoContainer.innerHTML = "";
+function clearEl(el) {
+  el.innerHTML = "";
 }
 
 function renderLocalStorageToDosArray() {
-  clearToDoContainer();
-
   const todosArray = getToDos();
-  for (let i = 0; i < todosArray.length; i++) {
-    renderToDo(todosArray[i]);
-  }
+
+  renderToDosArray(todosArray);
 }
 
 function renderToDosArray(toDosArray) {
-  clearToDoContainer();
+  clearEl(todoContainer);
 
   for (let i = 0; i < toDosArray.length; i++) {
     renderToDo(toDosArray[i]);
@@ -463,91 +505,18 @@ function showCustomToast(message) {
   }, 3000);
 }
 
-const createTodoButton = document.getElementById("createTodo-button");
-const cancelCreateToDoButton = document.getElementById("closeModal");
-const acceptCreateToDoButton = document.getElementById("acceptCreation");
-
-const createTagButton = document.getElementById("createTag-button");
-const cancelCreateTagButton = document.getElementById("closeCreateTagModal");
-const acceptCreateTagButton = document.getElementById("acceptCreateTagModal");
-
-const cancelEditButton = document.getElementById("closeEditModal");
-const acceptEditButton = document.getElementById("acceptEdit");
-
-const createTodoModal = document.getElementById("createTodo-dialog");
-const editTodoModal = document.getElementById("editTodo-dialog");
-const createtagModal = document.getElementById("createTag-dialog");
-
-const toastElement = document.getElementById("toast");
-
-const todoContainer = document.getElementById("todo-container");
-
-const template = document.getElementById("template");
-
-createTodoButton.addEventListener("click", openCreateToDoModal);
-
-cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
-acceptCreateToDoButton.addEventListener("click", renderNewToDo);
-
-cancelEditButton.addEventListener("click", closeEditToDoModal);
-
-acceptEditButton.addEventListener("click", renderEditedToDo);
-
-createTagButton.addEventListener("click", openCreateTagModal);
-cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
-acceptCreateTagButton.addEventListener("click", createNewTag);
-
-const createTodoModalDetails = createTodoModal.querySelector("details");
-const editTodoModalDetails = editTodoModal.querySelector("details");
-
-const createModalDropdownButton = document.getElementById("create-modal-dropdown-button");
-const createModalDropdown = document.getElementById('create-modal-tags-dropdown');
-
-createModalDropdownButton.addEventListener('click', ()=> {
-  renderTagsDropdownUlIntoElem(createModalDropdown);
-})
-
-renderLocalStorageToDosArray();
-renderTagsIntoModals();
-
 function getCheckedTags(modalWindow) {
   let checkboxes = modalWindow.querySelectorAll('input[type="checkbox"]');
   let checkedCheckboxes = Array.from(checkboxes).filter(
     (checkbox) => checkbox.checked
   );
-  let parentTexts = checkedCheckboxes.map((checkbox) =>
-    checkbox.parentElement.textContent.trim()
-  );
-  return parentTexts;
+  let checkedTags = checkedCheckboxes.map((checkbox) => checkbox.value);
+  return checkedTags;
 }
 
-const sortButton = document.getElementById("sort-dropdown-button");
-const sortOptionsList = document.getElementById("sort-options-list");
-
-sortButton.addEventListener("click", (event) => {
-  event.stopPropagation()
-  sortOptionsList.style.display =
-    sortOptionsList.style.display === "block" ? "none" : "block";
-});
-
-sortOptionsList.addEventListener("click", (event) => {
-  if (event.target.tagName === "LI") {
-    const selectedValue = event.target.getAttribute("data-value");
-    const selectedText = event.target.textContent;
-
-    sortButton.innerHTML = `<img src="icons8-sort-100.png" alt="" class="icon"> ${selectedText}`;
-
-    sortOptionsList.style.display = "none";
-
-    renderSortedTodos(selectedValue);
-  }
-});
-
-document.addEventListener("click", (event) => {
-  if (sortOptionsList.style.display === "block" && !sortOptionsList.contains(event.target) && !sortButton.contains(event.target)) {
-    sortOptionsList.style.display = "none";
-  }
-});
+function switchDisplay(el) {
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
 
 function renderSortedTodos(selectedValue) {
   let resultArray = [];
@@ -588,99 +557,35 @@ function sortTodosByPriority() {
   return todos;
 }
 
-const filterButton = document.getElementById("filter-dropdown-button");
-const filterOptionsList = document.getElementById("filter-options-list");
+// const filterButton = document.getElementById("filter-dropdown-button");
+// const filterOptionsList = document.getElementById("filter-options-list");
 
-filterButton.addEventListener("click", (event) => {
-  event.stopPropagation()
-  filterOptionsList.style.display =
-    filterOptionsList.style.display === "block" ? "none" : "block";
-});
+// filterButton.addEventListener("click", (event) => {
+//   event.stopPropagation()
+//   filterOptionsList.style.display =
+//     filterOptionsList.style.display === "block" ? "none" : "block";
+// });
 
-filterOptionsList.addEventListener("click", (event) => {
-  if (event.target.tagName === "LI") {
-    const selectedValue = event.target.getAttribute("data-value");
-    const selectedText = event.target.textContent;
+// filterOptionsList.addEventListener("click", (event) => {
+//   if (event.target.tagName === "LI") {
+//     const selectedValue = event.target.getAttribute("data-value");
+//     const selectedText = event.target.textContent;
 
-    filterButton.innerHTML = `<img src="icons8-filter-100.png" alt="" class="icon"> ${selectedText}`;
+//     filterButton.innerHTML = `<img src="icons8-filter-100.png" alt="" class="icon"> ${selectedText}`;
 
-    filterOptionsList.style.display = "none";
-  }
-});
+//     filterOptionsList.style.display = "none";
+//   }
+// });
 
-const statusDropdownButton = document.getElementById("status-dropdown-button");
-const statusDropdown = document.getElementById("filter-status-options");
+// const statusDropdownButton = document.getElementById("status-dropdown-button");
+// const statusDropdown = document.getElementById("filter-status-options");
 
+// statusDropdownButton.addEventListener('click',() => {
+//   statusDropdown.style.display =
+//   statusDropdown.style.display === "block" ? "none" : "block";
+// })
 
-statusDropdownButton.addEventListener('click',() => {
-  statusDropdown.style.display =
-  statusDropdown.style.display === "block" ? "none" : "block";
-})
+inputTemperature();
+inputCurrency();
 
-
-/* <style>
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        .dropdown-content label {
-            padding: 12px 16px;
-            display: block;
-            cursor: pointer;
-        }
-
-        .dropdown-content label:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
-</head>
-<body>
-
-<div class="dropdown">
-    <button class="dropbtn">Выбрать пункты</button>
-    <div class="dropdown-content" id="dropdown-content">
-        <!-- Элементы будут добавлены здесь -->
-    </div>
-</div>
-
-<script>
-    const items = ["Пункт 1", "Пункт 2", "Пункт 3", "Пункт 4"]; // Ваш массив строк
-    const dropdownContent = document.getElementById('dropdown-content');
-
-    items.forEach((item, index) => {
-        const label = document.createElement('label');
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = `option${index + 1}`;
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(` ${item}`));
-        dropdownContent.appendChild(label);
-    });
-
-    const checkboxes = document.querySelectorAll('.dropdown-content input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            const selectedValues = [];
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    selectedValues.push(cb.value);
-                }
-            });
-            console.log('Выбранные значения:', selectedValues);
-        });
-    });
-</script>*/
+renderLocalStorageToDosArray();

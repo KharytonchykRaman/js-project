@@ -239,3 +239,27 @@ summary {
 .sort-options li:hover, .filter-options li:hover {
   background-color: #f0f0f0;
 }
+
+.create-modal-tags-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content label {
+  padding: 12px 16px;
+  display: block;
+  cursor: pointer;
+}
+
+.dropdown-content label:hover {
+  background-color: #f1f1f1;
+}

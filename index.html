@@ -50,7 +50,6 @@
 
               <button class="dropdown-button" id="tags-dropdown-button">По тегам</button>
               
-
               <button class="dropdown-button" id="createDate-dropdown-button">По дате создания</button>
               <li class="filter-options" id="filter-createDate-dropdown">
                 <label>
@@ -125,9 +124,12 @@
         <input class="modal-content" type="date" name="deadline" id="newToDo-date">
       </label>
 
-      <div class="tags-dropdown" id="create-modal-tags-dropdown">
-        <button class="dropdown-button" id="create-modal-dropdown-button">Теги</button>
-      </div>
+      <div class="create-modal-tags-dropdown">
+        <button type="button" class="dropdown-button" id="create-modal-tags-dropdown-button">Выберите теги</button>
+        <div class="dropdown-content" id="create-modal-tags-dropdown-content">
+            
+        </div>
+    </div>
 
       <label>
         Статус выполнения
@@ -162,8 +164,12 @@
         <input class="modal-content" type="date" name="deadline" id="editToDo-date">
       </label>
 
-      <details class="tags">
-      </details>
+      <div class="edit-modal-tags-dropdown">
+        <button type="button" class="dropdown-button" id="edit-modal-tags-dropdown-button">Выберите теги</button>
+        <div class="dropdown-content" id="edit-modal-tags-dropdown-content">
+            
+        </div>
+    </div>
 
       <label>
         Статус выполнения
