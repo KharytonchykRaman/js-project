@@ -46,6 +46,18 @@ const LOCAL_STORAGE_TAGLIST_KEY = "tag";
 const tempDiv = document.getElementById("weather");
 const currDiv = document.getElementById("currency");
 
+const newToDoName = document.getElementById("newToDo-name");
+const newToDoDate = document.getElementById("newToDo-date");
+const newToDoDesc = document.getElementById("newToDo-description");
+const newToDoStatus = document.getElementById("newToDo-status");
+
+const newTagName = document.getElementById("createTag-name");
+
+const editTodoName = document.getElementById("editToDo-name");
+const editTodoDate = document.getElementById("editToDo-date");
+const editTodoDesc = document.getElementById("editToDo-description");
+const editTodoStatus = document.getElementById("editToDo-status");
+
 const createTodoButton = document.getElementById("createTodo-button");
 const cancelCreateToDoButton = document.getElementById("closeModal");
 const acceptCreateToDoButton = document.getElementById("acceptCreation");
@@ -273,8 +285,8 @@ function doesTagExist(tagList, tag) {
 }
 
 function validateNewToDo() {
-  const name = document.getElementById("newToDo-name").value;
-  const date = document.getElementById("newToDo-date").value;
+  const name = newToDoName.value;
+  const date = newToDoDate.value;
   const tags = getCheckedTags(createTodoModal);
 
   if (!isNameValid(name)) {
@@ -297,7 +309,7 @@ function validateNewToDo() {
 
 function validateNewTag() {
   const tagList = getTagList();
-  const newTag = document.getElementById("createTag-name").value;
+  const newTag = newTagName.value;
 
   if (!isNameValid(newTag)) {
     alert("empty name");
@@ -313,8 +325,8 @@ function validateNewTag() {
 }
 
 function validateEditedToDo() {
-  const name = document.getElementById("editToDo-name").value;
-  const date = document.getElementById("editToDo-date").value;
+  const name = editTodoName.value;
+  const date = editTodoDate.value;
   const tags = getCheckedTags(editTodoModal);
 
   if (!isNameValid(name)) {
@@ -337,7 +349,7 @@ function validateEditedToDo() {
 
 function createNewTag() {
   if (validateNewTag()) {
-    const tagName = document.getElementById("createTag-name").value;
+    const tagName = newTagName.value;
     const tagList = getTagList();
     tagList.addTag(tagName);
     uploadTagListToLocalStorage(tagList);
@@ -353,11 +365,11 @@ function generateUniqueId() {
 function createNewToDo() {
   let newToDo = {
     id: generateUniqueId(),
-    title: document.getElementById("newToDo-name").value,
-    description: document.getElementById("newToDo-description").value,
-    deadline: document.getElementById("newToDo-date").value,
+    title: newTagName.value,
+    description: newToDoDesc.value,
+    deadline: newToDoDate.value,
     tags: getCheckedTags(createTodoModal),
-    status: document.getElementById("newToDo-status").value,
+    status: newToDoStatus.value,
     createdAt: new Date(),
     updatedAt: new Date(),
     history: [{ action: "created", timestamp: new Date() }],
@@ -384,11 +396,11 @@ function editToDo(id) {
   if (validateEditedToDo()) {
     const todo = getToDoList().getToDoById(id);
 
-    todo.title = document.getElementById("editToDo-name").value;
-    todo.description = document.getElementById("editToDo-description").value;
-    todo.deadline = document.getElementById("editToDo-date").value;
+    todo.title = editTodoName.value;
+    todo.description = editTodoDesc.value;
+    todo.deadline = editTodoDate.value;
     todo.tags = getCheckedTags(editTodoModal);
-    todo.status = document.getElementById("editToDo-status").value;
+    todo.status = editTodoStatus.value;
     todo.updatedAt = new Date();
     todo.history.push({ action: "updated", timestamp: new Date() });
 
@@ -421,10 +433,10 @@ function initEditToDoModal(id) {
 
   openEditToDoModal();
 
-  document.getElementById("editToDo-name").value = todo.title;
-  document.getElementById("editToDo-description").value = todo.description;
-  document.getElementById("editToDo-date").value = todo.deadline;
-  document.getElementById("editToDo-status").value = todo.status;
+  editTodoName.value = todo.title;
+  editTodoDesc.value = todo.description;
+  editTodoDate.value = todo.deadline;
+  editTodoStatus.value = todo.status;
   document.getElementById("hidden-input-todoId").value = todo.id;
 
   chooseCheckboxesEditModal(todo);
