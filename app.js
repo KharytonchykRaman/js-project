@@ -100,9 +100,9 @@ const editModalDropdownContent = document.getElementById(
   "edit-modal-tags-dropdown-content"
 );
 
-editModalDropdownButton.addEventListener('click',()=>{
+editModalDropdownButton.addEventListener("click", () => {
   switchDisplay(editModalDropdownContent);
-})
+});
 
 createTodoButton.addEventListener("click", openCreateToDoModal);
 
@@ -569,33 +569,40 @@ function sortTodosByPriority() {
   return todos;
 }
 
-// const filterButton = document.getElementById("filter-dropdown-button");
-// const filterOptionsList = document.getElementById("filter-options-list");
+const filterButton = document.getElementById("filter-dropdown-button");
+const filterDropdownContent = document.getElementById("filter-dropdown-content");
 
-// filterButton.addEventListener("click", (event) => {
-//   event.stopPropagation()
-//   filterOptionsList.style.display =
-//     filterOptionsList.style.display === "block" ? "none" : "block";
-// });
+filterButton.addEventListener("click", (event) => {
+  switchDisplay(filterDropdownContent);
+});
 
-// filterOptionsList.addEventListener("click", (event) => {
-//   if (event.target.tagName === "LI") {
-//     const selectedValue = event.target.getAttribute("data-value");
-//     const selectedText = event.target.textContent;
+const filterStatusDropdownButton = document.getElementById("status-dropdown-button");
+const filterStatusDropdownContent = document.getElementById("filter-status-dropdown-content");
 
-//     filterButton.innerHTML = `<img src="icons8-filter-100.png" alt="" class="icon"> ${selectedText}`;
+const filterTagsDropdownButton = document.getElementById("tags-dropdown-button");
+const filterTagsDropdownContent = document.getElementById("filter-tags-dropdown-content");
 
-//     filterOptionsList.style.display = "none";
-//   }
-// });
+const filterCreateDateDropdownButton = document.getElementById("createDate-dropdown-button");
+const filterCreateDateDropdownContent = document.getElementById("filter-createDate-dropdown-content");
 
-// const statusDropdownButton = document.getElementById("status-dropdown-button");
-// const statusDropdown = document.getElementById("filter-status-options");
+const filterDeadlineDropdownButton = document.getElementById("deadline-dropdown-button");
+const filterDeadlineDropdownContent = document.getElementById("filter-deadline-dropdown-content");
 
-// statusDropdownButton.addEventListener('click',() => {
-//   statusDropdown.style.display =
-//   statusDropdown.style.display === "block" ? "none" : "block";
-// })
+filterStatusDropdownButton.addEventListener("click", (event) => {
+  switchDisplay(filterStatusDropdownContent);
+});
+
+filterTagsDropdownButton.addEventListener("click", (event) => {
+  switchDisplay(filterDropdownContent);
+});
+
+filterCreateDateDropdownButton.addEventListener("click", (event) => {
+  switchDisplay(filterCreateDateDropdownContent);
+});
+
+filterDeadlineDropdownButton.addEventListener("click", (event) => {
+  switchDisplay(filterDeadlineDropdownContent);
+});
 
 inputTemperature();
 inputCurrency();

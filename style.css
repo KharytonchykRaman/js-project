@@ -177,10 +177,13 @@ label > * {
   pointer-events: none;
 }
 
-summary {
-  cursor: pointer;
-  user-select: none;
-}
+.dropdown-button {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+} 
 
 .sort-dropdown, .filter-dropdown {
   position: relative;
@@ -196,15 +199,6 @@ summary {
   z-index: 1;
   left: 100%;
   top: 10px;
-}
-
-.dropdown-button {
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  padding: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
 }
 
 .dropdown-button .icon {
