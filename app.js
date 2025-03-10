@@ -43,6 +43,9 @@ class TagList {
 const LOCAL_STORAGE_TODOLIST_KEY = "todo";
 const LOCAL_STORAGE_TAGLIST_KEY = "tag";
 
+const MAX_NAME_LENGTH = 25;
+const MAX_TODODESC_LENGTH = 300;
+
 const tempDiv = document.getElementById("weather");
 const currDiv = document.getElementById("currency");
 
@@ -118,7 +121,6 @@ cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
 acceptCreateTagButton.addEventListener("click", createNewTag);
 
 sortButton.addEventListener("click", (event) => {
-  event.stopPropagation();
   switchDisplay(sortOptionsList);
 });
 
@@ -142,6 +144,14 @@ document.addEventListener("click", (event) => {
     !sortButton.contains(event.target)
   ) {
     sortOptionsList.style.display = "none";
+  }
+
+  if (
+    filterDropdownContent.style.display === "block" &&
+    !filterDropdownContent.contains(event.target) &&
+    !filterButton.contains(event.target)
+  ) {
+    filterDropdownContent.style.display = "none";
   }
 });
 
@@ -213,7 +223,7 @@ function renderTagsDropdown(parentEl) {
   const tags = getTags();
 
   tags.forEach((tag) => {
-    const label = document.createElement("label");
+    const label = document.createElement("li");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.value = tag;
@@ -266,7 +276,11 @@ function uploadTagListToLocalStorage(tagList) {
 }
 
 function isNameValid(name) {
-  return name.trim().length > 0;
+  return name.trim().length > 0  && name.trim().length < MAX_NAME_LENGTH;
+}
+
+function isDescriptionValid(desc) {
+  return desc.trim().length < MAX_TODODESC_LENGTH;
 }
 
 function isDateValid(date) {
@@ -287,10 +301,11 @@ function doesTagExist(tagList, tag) {
 function validateNewToDo() {
   const name = newToDoName.value;
   const date = newToDoDate.value;
+  const desc = newToDoDesc.value;
   const tags = getCheckedTags(createTodoModal);
 
   if (!isNameValid(name)) {
-    alert("empty name");
+    alert("name is empty or very long");
     return false;
   }
 
@@ -304,6 +319,11 @@ function validateNewToDo() {
     return false;
   }
 
+  if (!isDescriptionValid(desc)) {
+    alert("description is too long");
+    return false;
+  }
+
   return true;
 }
 
@@ -312,7 +332,7 @@ function validateNewTag() {
   const newTag = newTagName.value;
 
   if (!isNameValid(newTag)) {
-    alert("empty name");
+    alert("name is empty or very long");
     return false;
   }
 
@@ -328,9 +348,10 @@ function validateEditedToDo() {
   const name = editTodoName.value;
   const date = editTodoDate.value;
   const tags = getCheckedTags(editTodoModal);
+  const desc = editTodoDesc.value;
 
   if (!isNameValid(name)) {
-    alert("empty name");
+    alert("name is empty or very long");
     return false;
   }
 
@@ -341,6 +362,11 @@ function validateEditedToDo() {
 
   if (!areTagsValid(tags)) {
     alert("empty tags");
+    return false;
+  }
+
+  if (!isDescriptionValid(desc)) {
+    alert("description is too long");
     return false;
   }
 
