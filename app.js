@@ -223,13 +223,19 @@ function renderTagsDropdown(parentEl) {
   const tags = getTags();
 
   tags.forEach((tag) => {
-    const label = document.createElement("li");
+    const li = document.createElement("li");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.value = tag;
-    label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(tag));
-    parentEl.appendChild(label);
+    li.appendChild(checkbox);
+    li.appendChild(document.createTextNode(tag));
+    parentEl.appendChild(li);
+
+    li.addEventListener("click", (event) => {
+      if (event.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+      }
+    });
   });
 }
 
@@ -276,7 +282,7 @@ function uploadTagListToLocalStorage(tagList) {
 }
 
 function isNameValid(name) {
-  return name.trim().length > 0  && name.trim().length < MAX_NAME_LENGTH;
+  return name.trim().length > 0 && name.trim().length < MAX_NAME_LENGTH;
 }
 
 function isDescriptionValid(desc) {
@@ -391,7 +397,7 @@ function generateUniqueId() {
 function createNewToDo() {
   let newToDo = {
     id: generateUniqueId(),
-    title: newTagName.value,
+    title: newToDoName.value,
     description: newToDoDesc.value,
     deadline: newToDoDate.value,
     tags: getCheckedTags(createTodoModal),
@@ -596,39 +602,118 @@ function sortTodosByPriority() {
 }
 
 const filterButton = document.getElementById("filter-dropdown-button");
-const filterDropdownContent = document.getElementById("filter-dropdown-content");
+const filterDropdownContent = document.getElementById(
+  "filter-dropdown-content"
+);
 
 filterButton.addEventListener("click", (event) => {
+  clearEl(filterTagsDropdownContent);
+  renderTagsDropdown(filterTagsDropdownContent);
   switchDisplay(filterDropdownContent);
 });
 
-const filterStatusDropdownButton = document.getElementById("status-dropdown-button");
-const filterStatusDropdownContent = document.getElementById("filter-status-dropdown-content");
+const filterStatusDropdownButton = document.getElementById(
+  "status-dropdown-button"
+);
+const filterStatusDropdownContent = document.getElementById(
+  "filter-status-dropdown-content"
+);
 
-const filterTagsDropdownButton = document.getElementById("tags-dropdown-button");
-const filterTagsDropdownContent = document.getElementById("filter-tags-dropdown-content");
+const filterTagsDropdownButton = document.getElementById(
+  "tags-dropdown-button"
+);
+const filterTagsDropdownContent = document.getElementById(
+  "filter-tags-dropdown-content"
+);
 
-const filterCreateDateDropdownButton = document.getElementById("createDate-dropdown-button");
-const filterCreateDateDropdownContent = document.getElementById("filter-createDate-dropdown-content");
+const filterCreateDateDropdownButton = document.getElementById(
+  "createDate-dropdown-button"
+);
+const filterCreateDateDropdownContent = document.getElementById(
+  "filter-createDate-dropdown-content"
+);
 
-const filterDeadlineDropdownButton = document.getElementById("deadline-dropdown-button");
-const filterDeadlineDropdownContent = document.getElementById("filter-deadline-dropdown-content");
+const filterDeadlineDropdownButton = document.getElementById(
+  "deadline-dropdown-button"
+);
+const filterDeadlineDropdownContent = document.getElementById(
+  "filter-deadline-dropdown-content"
+);
+
+function hideElements(elements) {
+  if (!Array.isArray(elements)) {
+    elements = [elements];
+  }
+  elements.forEach((el) => (el.style.display = "none"));
+}
 
 filterStatusDropdownButton.addEventListener("click", (event) => {
+  hideElements([
+    filterTagsDropdownContent,
+    filterCreateDateDropdownContent,
+    filterDeadlineDropdownContent,
+  ]);
   switchDisplay(filterStatusDropdownContent);
+  event.stopPropagation();
 });
 
 filterTagsDropdownButton.addEventListener("click", (event) => {
-  switchDisplay(filterDropdownContent);
+  hideElements([
+    filterStatusDropdownContent,
+    filterCreateDateDropdownContent,
+    filterDeadlineDropdownContent,
+  ]);
+
+  switchDisplay(filterTagsDropdownContent);
+  event.stopPropagation();
 });
 
 filterCreateDateDropdownButton.addEventListener("click", (event) => {
+  hideElements([
+    filterStatusDropdownContent,
+    filterTagsDropdownContent,
+    filterDeadlineDropdownContent,
+  ]);
   switchDisplay(filterCreateDateDropdownContent);
+  event.stopPropagation();
 });
 
 filterDeadlineDropdownButton.addEventListener("click", (event) => {
+  hideElements([
+    filterStatusDropdownContent,
+    filterTagsDropdownContent,
+    filterCreateDateDropdownContent,
+  ]);
   switchDisplay(filterDeadlineDropdownContent);
+  event.stopPropagation();
 });
+
+const cancelFilterButton = document.getElementById("cancelFilterButton");
+const acceptFilterButton = document.getElementById("acceptFilterButton");
+
+cancelFilterButton.addEventListener("click", () => {
+  switchDisplay(filterDropdownContent);
+});
+acceptFilterButton.addEventListener("click", () => {
+  switchDisplay(filterDropdownContent);
+  renderFilteredTodos;
+});
+
+function renderFilteredTodos() {
+  const filteredTodos = filterTodos();
+  renderToDosArray(filteredTodos);
+}
+
+function filterTodos(){
+  const status = filterStatusDropdownContent.value;
+  const tags = getCheckedTags(filterTagsDropdownContent);
+  const createDateAfter = filterCreateDateDropdownContent.querySelector('#filter-createDate-after-input').value;
+  const createDateBefore = filterCreateDateDropdownContent.querySelector('#filter-createDate-before-input').value;
+  const deadlineAfter = filterCreateDateDropdownContent.querySelector('#filter-deadline-after-input').value;
+  const deadlineBefore = filterCreateDateDropdownContent.querySelector('#filter-deadline-before-input').value;
+
+  return filteredTodos;
+}
 
 inputTemperature();
 inputCurrency();

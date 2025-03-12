@@ -253,3 +253,8 @@ label > * {
   width: 100%;
   justify-content: center;
 }
+
+.tags-dropdown{
+  overflow-y: auto;
+  height: 150px;
+}
