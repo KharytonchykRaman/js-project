@@ -126,7 +126,8 @@ label > * {
   margin: 30px;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: row;
+  gap: 10%;
 }
 
 .todo-card {
@@ -254,7 +255,32 @@ label > * {
   justify-content: center;
 }
 
-.tags-dropdown{
+.tags-dropdown {
   overflow-y: auto;
   height: 150px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10%;
+}
+
+#create-modal-tags-dropdown-hide-button {
+  border: none;
+  padding: 10px 15px;
+}
+
+#create-modal-tags-dropdown-hide-button:hover{
+  background-color: #ddd;
+  transition: 0.3s ease-in-out;
+}
+
+#edit-modal-tags-dropdown-hide-button {
+  border: none;
+  padding: 10px 15px;
+}
+
+#edit-modal-tags-dropdown-hide-button:hover{
+  background-color: #ddd;
+  transition: 0.3s ease-in-out;
 }

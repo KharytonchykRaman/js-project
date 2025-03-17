@@ -44,6 +44,7 @@
 
               <button class="dropdown-button" id="status-dropdown-button" type="button">По статусу</button>
                 <select class="dropdown-content" id="filter-status-dropdown-content">
+                  <option value="Все варианты">Все варианты</option>
                   <option value="В процессе">В процессе</option>
                   <option value="Завершено">Завершено</option>
                 </select>
@@ -129,7 +130,10 @@
       </label>
 
       <div class="dropdown" id="create-modal-tags-dropdown">
-        <button type="button" class="dropdown-button" id="create-modal-tags-dropdown-button">Выберите теги</button>
+        <div class="buttons">
+          <button type="button" class="dropdown-button" id="create-modal-tags-dropdown-button">Выберите теги</button>
+          <button type="button" class="" id="create-modal-tags-dropdown-hide-button">Закрыть</button>
+        </div>
         <div class="dropdown-content tags-dropdown" id="create-modal-tags-dropdown-content">
             
         </div>
@@ -169,7 +173,10 @@
       </label>
 
       <div class="dropdown" id="edit-modal-tags-dropdown">
-        <button type="button" class="dropdown-button" id="edit-modal-tags-dropdown-button">Выберите теги</button>
+        <div class="buttons">
+          <button type="button" class="dropdown-button" id="edit-modal-tags-dropdown-button">Выберите теги</button>
+          <button type="button" class="" id="edit-modal-tags-dropdown-hide-button">Закрыть</button>
+        </div>
         <div class="dropdown-content tags-dropdown" id="edit-modal-tags-dropdown-content">
             
         </div>

@@ -91,7 +91,13 @@ const createModalDropdownButton = document.getElementById(
 const createModalDropdownContent = document.getElementById(
   "create-modal-tags-dropdown-content"
 );
+const createModalDropdownHide = document.getElementById(
+  "create-modal-tags-dropdown-hide-button"
+);
 
+createModalDropdownHide.addEventListener("click", () => {
+  hideElements(createModalDropdownContent);
+});
 createModalDropdownButton.addEventListener("click", () => {
   switchDisplay(createModalDropdownContent);
 });
@@ -102,7 +108,13 @@ const editModalDropdownButton = document.getElementById(
 const editModalDropdownContent = document.getElementById(
   "edit-modal-tags-dropdown-content"
 );
+const editModalDropdownHide = document.getElementById(
+  "edit-modal-tags-dropdown-hide-button"
+);
 
+editModalDropdownHide.addEventListener("click", () => {
+  hideElements(editModalDropdownContent);
+});
 editModalDropdownButton.addEventListener("click", () => {
   switchDisplay(editModalDropdownContent);
 });
@@ -413,11 +425,12 @@ function createNewToDo() {
 function renderNewToDo() {
   if (validateNewToDo()) {
     let newToDo = createNewToDo();
-    renderToDo(newToDo);
 
     const toDoList = getToDoList();
     toDoList.addToDo(newToDo);
     uploadToDoListToLocalStorage(toDoList);
+
+    renderLocalStorageToDosArray();
 
     closeCreateToDoModal();
     showCustomToast("Задача добавлена!");
@@ -607,8 +620,6 @@ const filterDropdownContent = document.getElementById(
 );
 
 filterButton.addEventListener("click", (event) => {
-  clearEl(filterTagsDropdownContent);
-  renderTagsDropdown(filterTagsDropdownContent);
   switchDisplay(filterDropdownContent);
 });
 
@@ -691,12 +702,26 @@ filterDeadlineDropdownButton.addEventListener("click", (event) => {
 const cancelFilterButton = document.getElementById("cancelFilterButton");
 const acceptFilterButton = document.getElementById("acceptFilterButton");
 
+const createDateAfterInput = filterCreateDateDropdownContent.querySelector(
+  "#filter-createDate-after-input"
+);
+const createDateBeforeInput = filterCreateDateDropdownContent.querySelector(
+  "#filter-createDate-before-input"
+);
+const deadlineAfterInput = filterDeadlineDropdownContent.querySelector(
+  "#filter-deadline-after-input"
+);
+const deadlineBeforeInput = filterDeadlineDropdownContent.querySelector(
+  "#filter-deadline-before-input"
+);
+
 cancelFilterButton.addEventListener("click", () => {
   switchDisplay(filterDropdownContent);
 });
 acceptFilterButton.addEventListener("click", () => {
+  debugger;
   switchDisplay(filterDropdownContent);
-  renderFilteredTodos;
+  renderFilteredTodos();
 });
 
 function renderFilteredTodos() {
@@ -704,13 +729,43 @@ function renderFilteredTodos() {
   renderToDosArray(filteredTodos);
 }
 
-function filterTodos(){
-  const status = filterStatusDropdownContent.value;
+function isSubset(arr1, arr2) {
+  const filtered = arr2.filter((element) => arr1.includes(element));
+  return filtered.length === arr2.length;
+}
+
+function filterTodos() {
+  const status =
+    filterStatusDropdownContent.value === "Все варианты"
+      ? null
+      : filterStatusDropdownContent.value;
   const tags = getCheckedTags(filterTagsDropdownContent);
-  const createDateAfter = filterCreateDateDropdownContent.querySelector('#filter-createDate-after-input').value;
-  const createDateBefore = filterCreateDateDropdownContent.querySelector('#filter-createDate-before-input').value;
-  const deadlineAfter = filterCreateDateDropdownContent.querySelector('#filter-deadline-after-input').value;
-  const deadlineBefore = filterCreateDateDropdownContent.querySelector('#filter-deadline-before-input').value;
+
+  const createDateAfter = createDateAfterInput.value
+    ? new Date(createDateAfterInput.value)
+    : null;
+  const createDateBefore = createDateBeforeInput.value
+    ? new Date(createDateBeforeInput.value)
+    : null;
+  const deadlineAfter = deadlineAfterInput.value
+    ? new Date(deadlineAfterInput.value)
+    : null;
+  const deadlineBefore = deadlineBeforeInput.value
+    ? new Date(deadlineBeforeInput.value)
+    : null;
+
+  const todos = getToDos();
+
+  const filteredTodos = todos.filter((todo) => {
+    if (status && todo.status !== status) return false; //короткое замыкание
+    if (!isSubset(todo.tags, tags)) return false;
+    if (createDateAfter && todo.createdAt <= createDateAfter) return false;
+    if (createDateBefore && todo.createdAt >= createDateBefore) return false;
+    if (deadlineAfter && todo.deadline <= deadlineAfter) return false;
+    if (deadlineBefore && todo.deadline >= deadlineBefore) return false;
+
+    return true;
+  });
 
   return filteredTodos;
 }
@@ -719,3 +774,5 @@ inputTemperature();
 inputCurrency();
 
 renderLocalStorageToDosArray();
+
+renderTagsDropdown(filterTagsDropdownContent);
