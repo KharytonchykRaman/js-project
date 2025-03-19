@@ -50,14 +50,14 @@ const tempDiv = document.getElementById("weather");
 const currDiv = document.getElementById("currency");
 
 const newToDoName = document.getElementById("newToDo-name");
-const newToDoDate = document.getElementById("newToDo-date");
+const newToDoDate = document.getElementById("newToDo-deadline");
 const newToDoDesc = document.getElementById("newToDo-description");
 const newToDoStatus = document.getElementById("newToDo-status");
 
 const newTagName = document.getElementById("createTag-name");
 
 const editTodoName = document.getElementById("editToDo-name");
-const editTodoDate = document.getElementById("editToDo-date");
+const editTodoDate = document.getElementById("editToDo-deadline");
 const editTodoDesc = document.getElementById("editToDo-description");
 const editTodoStatus = document.getElementById("editToDo-status");
 
@@ -83,7 +83,7 @@ const todoContainer = document.getElementById("todo-container");
 const template = document.getElementById("template");
 
 const sortButton = document.getElementById("sort-dropdown-button");
-const sortOptionsList = document.getElementById("sort-options-list");
+const sortOptionsList = document.getElementById("sort-dropdown-content");
 
 const createModalDropdownButton = document.getElementById(
   "create-modal-tags-dropdown-button"
@@ -140,12 +140,11 @@ sortOptionsList.addEventListener("click", (event) => {
   if (event.target.tagName === "LI") {
     const selectedValue = event.target.getAttribute("data-value");
     const selectedText = event.target.textContent;
-
     sortButton.innerHTML = `<img src="icons8-sort-100.png" alt="" class="icon"> ${selectedText}`;
-
     sortOptionsList.style.display = "none";
 
-    renderSortedTodos(selectedValue);
+    const filteredTodos = filterTodos();
+    renderSortedTodos(selectedValue, filteredTodos);
   }
 });
 
@@ -575,42 +574,36 @@ function switchDisplay(el) {
   el.style.display = el.style.display === "block" ? "none" : "block";
 }
 
-function renderSortedTodos(selectedValue) {
-  let resultArray = [];
+function renderSortedTodos(selectedValue, todos) {
+  let sortedTodos;
+
   if (selectedValue === "createDate") {
-    resultArray = sortTodosByDate();
+    sortedTodos = sortTodosByDate(todos);
   } else if (selectedValue === "name") {
-    resultArray = sortTodosByName();
+    sortedTodos = sortTodosByName(todos);
+  } else if (selectedValue === "priority") {
+    sortedTodos = sortTodosByPriority(todos);
   } else {
-    resultArray = sortTodosByPriority();
+    sortedTodos = todos;
   }
 
-  renderToDosArray(resultArray);
+  renderToDosArray(sortedTodos);
 }
 
-function sortTodosByDate() {
-  const todos = getToDos();
-
-  todos.sort(
+function sortTodosByDate(todos) {
+  return todos.sort(
     (todo1, todo2) => new Date(todo1.createdAt) - new Date(todo2.createdAt)
   );
-
-  return todos;
 }
 
-function sortTodosByName() {
-  const todos = getToDos();
-
-  todos.sort((todo1, todo2) =>
+function sortTodosByName(todos) {
+  return todos.sort((todo1, todo2) =>
     todo1.title.localeCompare(todo2.title, undefined, { sensitivity: "base" })
   );
-
-  return todos;
 }
 
-function sortTodosByPriority() {
-  const todos = getToDos();
-
+function sortTodosByPriority(todos) {
+  // codes
   return todos;
 }
 
@@ -619,8 +612,14 @@ const filterDropdownContent = document.getElementById(
   "filter-dropdown-content"
 );
 
-filterButton.addEventListener("click", (event) => {
+filterButton.addEventListener("click", () => {
   switchDisplay(filterDropdownContent);
+  hideElements([
+    filterStatusDropdownContent,
+    filterTagsDropdownContent,
+    filterCreateDateDropdownContent,
+    filterDeadlineDropdownContent,
+  ]);
 });
 
 const filterStatusDropdownButton = document.getElementById(
@@ -717,16 +716,51 @@ const deadlineBeforeInput = filterDeadlineDropdownContent.querySelector(
 
 cancelFilterButton.addEventListener("click", () => {
   switchDisplay(filterDropdownContent);
+  hideElements([
+    filterStatusDropdownContent,
+    filterTagsDropdownContent,
+    filterCreateDateDropdownContent,
+    filterDeadlineDropdownContent,
+  ]);
+
+  filterStatusDropdownContent.selectedIndex = 0;
+  createDateAfterInput.value = "";
+  createDateBeforeInput.value = "";
+  deadlineAfterInput.value = "";
+  deadlineBeforeInput.value = "";
+
+  filterTagsDropdownContent.innerHTML = "";
+  renderTagsDropdown(filterTagsDropdownContent);
+
+  renderLocalStorageToDosArray();
 });
 acceptFilterButton.addEventListener("click", () => {
-  debugger;
   switchDisplay(filterDropdownContent);
+  hideElements([
+    filterStatusDropdownContent,
+    filterTagsDropdownContent,
+    filterCreateDateDropdownContent,
+    filterDeadlineDropdownContent,
+  ]);
   renderFilteredTodos();
 });
 
 function renderFilteredTodos() {
   const filteredTodos = filterTodos();
-  renderToDosArray(filteredTodos);
+  const selectedValue = sortButton.textContent.trim();
+  let sortedTodos;
+
+  if (selectedValue === "По дате создания") {
+    sortedTodos = sortTodosByDate(filteredTodos);
+  } else if (selectedValue === "По алфавиту") {
+    sortedTodos = sortTodosByName(filteredTodos);
+  } else if (selectedValue === "По приоритету") {
+    sortedTodos = sortTodosByPriority(filteredTodos);
+  } else {
+    sortedTodos = filteredTodos;
+  }
+
+  renderToDosArray(sortedTodos);
 }
 
 function isSubset(arr1, arr2) {
@@ -775,4 +809,4 @@ inputCurrency();
 
 renderLocalStorageToDosArray();
 
-renderTagsDropdown(filterTagsDropdownContent);
+renderTagsDropdown(filterTagsDropdownContent);  
