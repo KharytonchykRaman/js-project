@@ -38,8 +38,7 @@ select {
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
-  font-size: 25px;
-  color: white;
+  align-items: center;
 }
 
 .info-container {
@@ -159,7 +158,8 @@ dialog label > * {
   margin: 30px;
   display: flex;
   flex-flow: row wrap;
-  gap: 10%;
+  justify-content: center;
+  gap: 5%;
 }
 
 .todo-card {
@@ -168,8 +168,17 @@ dialog label > * {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
-  max-width: 300px;
+  width: 150px;
+  margin-bottom: 20px;
+}
+
+.todo-card > * {
+  max-width: 120px;
+  word-wrap: break-word;
+  white-space: normal;
 }
 
 .todo-buttons {
@@ -275,7 +284,6 @@ dialog label > * {
 }
 
 #filter-status-dropdown-content {
-  width: 100%;
   padding: 4px;
   margin: 4px 0;
 }
@@ -359,10 +367,121 @@ dialog label > * {
 
 .todo-tags {
   background-color: #2ecc71;
+  padding: 3px;
   color: #ffffff;
+  border-radius: 3px;
 }
 
 .todo-status {
   background-color: #3498db;
+  padding: 3px;
   color: #ffffff;
+  border-radius: 3px;
+}
+
+.create-buttons {
+  display: flex;
+  gap: 300px;
+}
+
+@media (max-width: 1150px) {
+  .create-buttons {
+    gap: 150px;
+  }
+}
+
+@media (max-width: 950px) {
+  .info-container {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .header {
+    padding: 20px 50px;
+  }
+
+  .create-buttons {
+    gap: 60px;
+  }
+}
+
+@media (max-width: 675px) {
+  .info {
+    font-size: 20px;
+  }
+
+  .create-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .create-button {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .header {
+    padding: 15px 25px;
+  }
+
+  .logo {
+    font-size: 25px;
+  }
+
+  #todo-container {
+    margin: 20px 10px;
+  }
+
+  .dropdown-content .dropdown-content{
+    min-width: 150px;
+  }
+
+  .create-button {
+    font-size: 17px;
+    padding: 10px 20px;
+  }
+
+  #sort-dropdown-button,
+  .info,
+  #filter-dropdown-button,
+  #filter-dropdown-content > *,
+  #cancelFilterButton,
+  #acceptFilterButton {
+    font-size: 15px;
+  }
+
+  #filter-dropdown-content .form-buttons-container button{
+    padding: 8px 10px;
+  }
+
+  #filter-dropdown-content{
+    min-width: 185px;
+  }
+}
+
+@media (max-width: 360px) {
+  .todo-card {
+    width: 140px;
+    padding: 10px;
+  }
+
+  .create-container {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .header {
+    padding: 10px 20px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .dropdown-content .dropdown-content {
+    top: 100%;
+    left: 0;
+    margin-top: 3px;
+  }
 }
