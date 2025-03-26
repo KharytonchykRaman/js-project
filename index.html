@@ -25,66 +25,72 @@
       <main class="main">
         <section class="section-1">
 
-          <button class="create-button" id="createTodo-button">Добавить дело</button>
-
-          <div class="dropdown" id="sort-dropdown">
-            <button class="dropdown-button" id="sort-dropdown-button">
-              <img src="icons8-sort-100.png" alt="" class="icon"> Сортировка</button>
-            <ul class="dropdown-content" id="sort-dropdown-content">
-              <li data-value="createDate">По дате создания</li>
-              <li data-value="name">По алфавиту</li>
-              <li data-value="priority">По приоритету</li>
-            </ul>
-          </div>
-
-          <div class="dropdown" id="filter-dropdown">
-            <button class="dropdown-button" id="filter-dropdown-button">
-              <img src="icons8-filter-100.png" alt="" class="icon"> Фильтрация</button>
-            <ul class="dropdown-content" id="filter-dropdown-content">
-
-              <button class="dropdown-button" id="status-dropdown-button" type="button">По статусу</button>
-                <select class="dropdown-content" id="filter-status-dropdown-content">
-                  <option value="Все варианты">Все варианты</option>
-                  <option value="В процессе">В процессе</option>
-                  <option value="Завершено">Завершено</option>
-                </select>
-
-              <button type="button" class="dropdown-button" id="tags-dropdown-button">По тегам</button>
-              <div class="dropdown-content tags-dropdown" id="filter-tags-dropdown-content"></div>
-              
-              <button class="dropdown-button" id="createDate-dropdown-button" type="button">По дате создания</button>
-              <li class="dropdown-content" id="filter-createDate-dropdown-content">
-                <label>
-                  До:
-                  <input type="date" id="filter-createDate-before-input">
-                </label>
-                <label>
-                  После:
-                  <input type="date" id="filter-createDate-after-input">
-                </label>
-              </li>
-
-              <button class="dropdown-button" id="deadline-dropdown-button" type="button">По дедлайну</button>
-              <li class="dropdown-content" id="filter-deadline-dropdown-content">
-                <label>
-                  До:
-                  <input type="date" id="filter-deadline-before-input">
-                </label>
-                <label>
-                  После:  
-                  <input type="date" id="filter-deadline-after-input">
-                </label>
-              </li>
-              <div class="form-buttons-container">
-                <button type="reset" id="cancelFilterButton">Отменить</button>
-                <button type="button" id="acceptFilterButton">Применить</button>
+          <div class="create-container">
+            <div class="sort-filter">
+              <div class="dropdown" id="sort-dropdown">
+                <button class="dropdown-button" id="sort-dropdown-button">
+                  <img src="icons8-sort-100.png" alt="" class="icon"> Сортировка</button>
+                <ul class="dropdown-content" id="sort-dropdown-content">
+                  <li data-value="createDate">По дате создания</li>
+                  <li data-value="name">По алфавиту</li>
+                  <li data-value="priority">По приоритету</li>
+                </ul>
               </div>
-            </ul>
+
+              <div class="dropdown" id="filter-dropdown">
+                <button class="dropdown-button" id="filter-dropdown-button">
+                  <img src="icons8-filter-100.png" alt="" class="icon"> Фильтрация</button>
+                <ul class="dropdown-content" id="filter-dropdown-content">
+
+                  <button class="dropdown-button" id="status-dropdown-button" type="button">По статусу</button>
+                  <select class="dropdown-content" id="filter-status-dropdown-content">
+                    <option value="Все варианты">Все варианты</option>
+                    <option value="В процессе">В процессе</option>
+                    <option value="Завершено">Завершено</option>
+                  </select>
+
+                  <button type="button" class="dropdown-button" id="tags-dropdown-button">По тегам</button>
+                  <div class="dropdown-content tags-dropdown" id="filter-tags-dropdown-content"></div>
+
+                  <button class="dropdown-button" id="createDate-dropdown-button" type="button">По дате
+                    создания</button>
+                  <li class="dropdown-content" id="filter-createDate-dropdown-content">
+                    <label>
+                      До:
+                      <input type="date" id="filter-createDate-before-input">
+                    </label>
+                    <label>
+                      После:
+                      <input type="date" id="filter-createDate-after-input">
+                    </label>
+                  </li>
+
+                  <button class="dropdown-button" id="deadline-dropdown-button" type="button">По дедлайну</button>
+                  <li class="dropdown-content" id="filter-deadline-dropdown-content">
+                    <label>
+                      До:
+                      <input type="date" id="filter-deadline-before-input">
+                    </label>
+                    <label>
+                      После:
+                      <input type="date" id="filter-deadline-after-input">
+                    </label>
+                  </li>
+                  <div class="form-buttons-container">
+                    <button class="cancel-button" type="reset" id="cancelFilterButton">Отменить</button>
+                    <button class="accept-button" type="button" id="acceptFilterButton">Применить</button>
+                  </div>
+                </ul>
+
+              </div>
+            </div>
+
+
+            <button class="create-button" id="createTodo-button">Добавить дело</button>
+            <button class="create-button" id="createTag-button">Добавить тег</button>
           </div>
 
           <div id="todo-container"></div>
-
-          <button class="create-button" id="createTag-button">Добавить тег</button>
 
         </section>
       </main>
@@ -105,8 +111,10 @@
       <p class="todo-deadline"></p>
       <p class="todo-tags"></p>
       <p class="todo-status"></p>
-      <button class="edit-todo-button"></button>
-      <button class="delete-todo-button"></button>
+      <div class="todo-buttons">
+        <button class="edit-todo-button"></button>
+        <button class="delete-todo-button"></button>
+      </div>
     </div>
   </template>
 
@@ -120,8 +128,7 @@
 
       <label>
         Описание:
-        <input class="" type="text" name="description" id="newToDo-description"
-          placeholder="описание новой задачи">
+        <input class="" type="text" name="description" id="newToDo-description" placeholder="описание новой задачи">
       </label>
 
       <label>
@@ -135,9 +142,9 @@
           <button type="button" class="" id="create-modal-tags-dropdown-hide-button">Закрыть</button>
         </div>
         <div class="dropdown-content tags-dropdown" id="create-modal-tags-dropdown-content">
-            
+
         </div>
-    </div>
+      </div>
 
       <label>
         Статус выполнения
@@ -147,8 +154,8 @@
         </select>
       </label>
       <div class="form-buttons-container">
-        <button class="" type="reset" id="closeModal">Отмена</button>
-        <button class="" type="reset" id="acceptCreation">Сохранить</button>
+        <button class="cancel-button" type="reset" id="closeModal">Отмена</button>
+        <button class="accept-button" type="button" id="acceptCreation">Сохранить</button>
       </div>
     </form>
   </dialog>
@@ -163,8 +170,7 @@
 
       <label>
         Описание:
-        <input class="" type="text" name="description" id="editToDo-description"
-          placeholder="новое описание задачи">
+        <input class="" type="text" name="description" id="editToDo-description" placeholder="новое описание задачи">
       </label>
 
       <label>
@@ -178,9 +184,9 @@
           <button type="button" class="" id="edit-modal-tags-dropdown-hide-button">Закрыть</button>
         </div>
         <div class="dropdown-content tags-dropdown" id="edit-modal-tags-dropdown-content">
-            
+
         </div>
-    </div>
+      </div>
 
       <label>
         Статус выполнения
@@ -190,8 +196,8 @@
         </select>
       </label>
       <div class="form-buttons-container">
-        <button class="" type="reset" id="closeEditModal">Отмена</button>
-        <button class="" type="reset" id="acceptEdit">Сохранить</button>
+        <button class="cancel-button" type="reset" id="closeEditModal">Отмена</button>
+        <button class="accept-button" type="button" id="acceptEdit">Сохранить</button>
       </div>
       <input type="text" id="hidden-input-todoId">
     </form>
@@ -206,8 +212,8 @@
       </label>
 
       <div class="form-buttons-container">
-        <button class="" type="reset" id="closeCreateTagModal">Отмена</button>
-        <button class="" type="reset" id="acceptCreateTagModal">Сохранить</button>
+        <button class="cancel-button" type="reset" id="closeCreateTagModal">Отмена</button>
+        <button class="accept-button" type="button" id="acceptCreateTagModal">Сохранить</button>
       </div>
     </form>
   </dialog>

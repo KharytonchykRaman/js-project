@@ -322,25 +322,21 @@ function validateNewToDo() {
   const tags = getCheckedTags(createTodoModal);
 
   if (!isNameValid(name)) {
-    alert("name is empty or very long");
+    showCustomToast("Название не должно быть пустым или слишком длинным");
     return false;
   }
-
   if (!isDateValid(date)) {
-    alert("wrong deadline");
+    showCustomToast("Неверная дата дедлайна");
     return false;
   }
-
   if (!areTagsValid(tags)) {
-    alert("empty tags");
+    showCustomToast("Выберите хотя бы один тег");
     return false;
   }
-
   if (!isDescriptionValid(desc)) {
-    alert("description is too long");
+    showCustomToast("Описание слишком длинное");
     return false;
   }
-
   return true;
 }
 
@@ -349,12 +345,12 @@ function validateNewTag() {
   const newTag = newTagName.value;
 
   if (!isNameValid(newTag)) {
-    alert("name is empty or very long");
+    showCustomToast("Название не должно быть пустым или слишком длинным");
     return false;
   }
 
   if (!doesTagExist(tagList, newTag)) {
-    alert("tag already exists");
+    showCustomToast("Данный тэг уже существует");
     return false;
   }
 
@@ -368,22 +364,22 @@ function validateEditedToDo() {
   const desc = editTodoDesc.value;
 
   if (!isNameValid(name)) {
-    alert("name is empty or very long");
+    showCustomToast("Название не должно быть пустым или слишком длинным");
     return false;
   }
 
   if (!isDateValid(date)) {
-    alert("wrong deadline");
+    showCustomToast("Неверная дата дедлайна");
     return false;
   }
 
   if (!areTagsValid(tags)) {
-    alert("empty tags");
+    showCustomToast("Выберите хотя бы один тег");
     return false;
   }
 
   if (!isDescriptionValid(desc)) {
-    alert("description is too long");
+    showCustomToast("Описание слишком длинное");
     return false;
   }
 
@@ -553,9 +549,7 @@ function renderToDosArray(toDosArray) {
 
 function showCustomToast(message) {
   toastElement.textContent = message;
-
   toastElement.classList.remove("hidden");
-
   setTimeout(() => {
     toastElement.classList.add("hidden");
   }, 3000);
