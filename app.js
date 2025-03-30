@@ -54,12 +54,82 @@ const newToDoDate = document.getElementById("newToDo-deadline");
 const newToDoDesc = document.getElementById("newToDo-description");
 const newToDoStatus = document.getElementById("newToDo-status");
 
+const newToDoLongNameErr = document.getElementById("newToDo-long-name-error");
+const newToDoEmptyNameErr = document.getElementById("newToDo-empty-name-error");
+const newToDoDateErr = document.getElementById("newToDo-date-error");
+const newToDoDescErr = document.getElementById("newToDo-desc-error");
+const newToDoTagsErr = document.getElementById("newToDo-tags-error");
+
+newToDoName.addEventListener('input', () => {
+  hideElements(newToDoEmptyNameErr);
+  if (newToDoName.value.length > MAX_NAME_LENGTH) {
+    newToDoName.value = newToDoName.value.slice(0, MAX_NAME_LENGTH);
+    newToDoLongNameErr.style.display = 'block';
+  } else {
+    hideElements(newToDoLongNameErr);
+  }
+});
+
+newToDoDesc.addEventListener('input', () => {
+  if (newToDoDesc.value.length > 300) {
+    newToDoDesc.value = newToDoDesc.value.slice(0, 300);
+    newToDoDescErr.style.display = 'block';
+  } else {
+    hideElements(newToDoDescErr);
+  }
+});
+
+newToDoDate.addEventListener('input', () => {
+  hideElements(newToDoDateErr);
+});
+
 const newTagName = document.getElementById("createTag-name");
+const newTagEmptyNameErr = document.getElementById("newTag-empty-name-error");
+const newTagExistingNameErr = document.getElementById("newTag-existing-name-error");
+const newTagLongNameErr = document.getElementById("newTag-long-name-error");
+
+newTagName.addEventListener('input', () => {
+  if (newTagName.value.length > MAX_NAME_LENGTH) {
+    newTagName.value = newTagName.value.slice(0, MAX_NAME_LENGTH);
+    newTagLongNameErr.style.display = 'block';
+  } else {
+    hideElements(newTagLongNameErr);
+  }
+});
 
 const editTodoName = document.getElementById("editToDo-name");
 const editTodoDate = document.getElementById("editToDo-deadline");
 const editTodoDesc = document.getElementById("editToDo-description");
 const editTodoStatus = document.getElementById("editToDo-status");
+
+const editToDoLongNameErr = document.getElementById("editToDo-long-name-error");
+const editToDoEmptyNameErr = document.getElementById("editToDo-empty-name-error");
+const editToDoDateErr = document.getElementById("editToDo-date-error");
+const editToDoDescErr = document.getElementById("editToDo-desc-error");
+const editToDoTagsErr = document.getElementById("editToDo-tags-error");
+
+editTodoName.addEventListener('input', () => {
+  hideElements(editToDoEmptyNameErr);
+  if (editTodoName.value.length > MAX_NAME_LENGTH) {
+    editTodoName.value = editTodoName.value.slice(0, MAX_NAME_LENGTH);
+    editToDoLongNameErr.style.display = 'block';
+  } else {
+    hideElements(editToDoLongNameErr);
+  }
+});
+
+editTodoDesc.addEventListener('input', () => {
+  if (editTodoDesc.value.length > 300) {
+    editTodoDesc.value = editTodoDesc.value.slice(0, 300);
+    editToDoDescErr.style.display = 'block';
+  } else {
+    hideElements(editToDoDescErr);
+  }
+});
+
+editTodoDate.addEventListener('input', () => {
+  hideElements(editToDoDateErr);
+});
 
 const createTodoButton = document.getElementById("createTodo-button");
 const cancelCreateToDoButton = document.getElementById("closeModal");
@@ -100,6 +170,7 @@ createModalDropdownHide.addEventListener("click", () => {
 });
 createModalDropdownButton.addEventListener("click", () => {
   switchDisplay(createModalDropdownContent);
+  hideElements(newToDoTagsErr);
 });
 
 const editModalDropdownButton = document.getElementById(
@@ -122,7 +193,7 @@ editModalDropdownButton.addEventListener("click", () => {
 createTodoButton.addEventListener("click", openCreateToDoModal);
 
 cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
-acceptCreateToDoButton.addEventListener("click", renderNewToDo);
+acceptCreateToDoButton.addEventListener("click",()=>{renderNewToDo(); hideElements(newToDoLongNameErr,newToDoDescErr)} );
 
 cancelEditButton.addEventListener("click", closeEditToDoModal);
 
@@ -130,7 +201,7 @@ acceptEditButton.addEventListener("click", renderEditedToDo);
 
 createTagButton.addEventListener("click", openCreateTagModal);
 cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
-acceptCreateTagButton.addEventListener("click", createNewTag);
+acceptCreateTagButton.addEventListener("click",()=>{createNewTag(); hideElements(newTagLongNameErr)} );
 
 sortButton.addEventListener("click", (event) => {
   switchDisplay(sortOptionsList);
@@ -216,6 +287,7 @@ function openEditToDoModal() {
 
 function closeCreateToDoModal() {
   createTodoModal.close();
+  hideElements(newToDoLongNameErr,newToDoDescErr);
 }
 
 function closeEditToDoModal() {
@@ -228,6 +300,7 @@ function openCreateTagModal() {
 
 function closeCreateTagModal() {
   createTagModal.close();
+  hideElements(newTagLongNameErr);
 }
 
 function renderTagsDropdown(parentEl) {
@@ -311,7 +384,8 @@ function areTagsValid(tags) {
   return tags.length > 0;
 }
 
-function doesTagExist(tagList, tag) {
+function doesTagExist(tag) {
+  const tagList = getTagList();
   return !tagList.isIncludesTag(tag);
 }
 
@@ -322,35 +396,30 @@ function validateNewToDo() {
   const tags = getCheckedTags(createTodoModal);
 
   if (!isNameValid(name)) {
-    showCustomToast("Название не должно быть пустым или слишком длинным");
+    newToDoEmptyNameErr.style.display = "block";
     return false;
   }
   if (!isDateValid(date)) {
-    showCustomToast("Неверная дата дедлайна");
+    newToDoDateErr.style.display = "block";
     return false;
   }
   if (!areTagsValid(tags)) {
-    showCustomToast("Выберите хотя бы один тег");
-    return false;
-  }
-  if (!isDescriptionValid(desc)) {
-    showCustomToast("Описание слишком длинное");
+    newToDoTagsErr.style.display = "block";
     return false;
   }
   return true;
 }
 
 function validateNewTag() {
-  const tagList = getTagList();
   const newTag = newTagName.value;
 
   if (!isNameValid(newTag)) {
-    showCustomToast("Название не должно быть пустым или слишком длинным");
+    newTagEmptyNameErr.style.display = "block";
     return false;
   }
 
-  if (!doesTagExist(tagList, newTag)) {
-    showCustomToast("Данный тэг уже существует");
+  if (!doesTagExist(newTag)) {
+    newTagExistingNameErr.style.display = "block";
     return false;
   }
 
@@ -364,22 +433,17 @@ function validateEditedToDo() {
   const desc = editTodoDesc.value;
 
   if (!isNameValid(name)) {
-    showCustomToast("Название не должно быть пустым или слишком длинным");
+    editToDoEmptyNameErr.style.display = "block";
     return false;
   }
 
   if (!isDateValid(date)) {
-    showCustomToast("Неверная дата дедлайна");
+    editToDoDateErr.style.display = "block";
     return false;
   }
 
   if (!areTagsValid(tags)) {
-    showCustomToast("Выберите хотя бы один тег");
-    return false;
-  }
-
-  if (!isDescriptionValid(desc)) {
-    showCustomToast("Описание слишком длинное");
+    editToDoTagsErr.style.display = "block";
     return false;
   }
 
@@ -767,6 +831,7 @@ function filterTodos() {
     filterStatusDropdownContent.value === "Все варианты"
       ? null
       : filterStatusDropdownContent.value;
+
   const tags = getCheckedTags(filterTagsDropdownContent);
 
   const createDateAfter = createDateAfterInput.value
@@ -785,12 +850,13 @@ function filterTodos() {
   const todos = getToDos();
 
   const filteredTodos = todos.filter((todo) => {
+    debugger
     if (status && todo.status !== status) return false; //короткое замыкание
     if (!isSubset(todo.tags, tags)) return false;
-    if (createDateAfter && todo.createdAt <= createDateAfter) return false;
-    if (createDateBefore && todo.createdAt >= createDateBefore) return false;
-    if (deadlineAfter && todo.deadline <= deadlineAfter) return false;
-    if (deadlineBefore && todo.deadline >= deadlineBefore) return false;
+    if (createDateAfter &&  new Date(todo.createdAt) <= createDateAfter) return false;
+    if (createDateBefore && new Date(todo.createdAt) >= createDateBefore) return false;
+    if (deadlineAfter && new Date(todo.deadline) <= deadlineAfter) return false;
+    if (deadlineBefore && new Date(todo.deadline) >= deadlineBefore) return false;
 
     return true;
   });

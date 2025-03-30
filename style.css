@@ -384,6 +384,11 @@ dialog label > * {
   gap: 300px;
 }
 
+.errorMessage{
+  color: red; 
+  display: none;
+}
+
 @media (max-width: 1150px) {
   .create-buttons {
     gap: 150px;

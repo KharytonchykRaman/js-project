@@ -126,16 +126,20 @@
       <label>
         Название:
         <input class="" type="text" name="name" id="newToDo-name" placeholder="название новой задачи">
+        <p class="errorMessage" id="newToDo-long-name-error">Максимум 25 символов!</p>
+        <p class="errorMessage" id="newToDo-empty-name-error">Название задачи не должно быть пустым!</p>
       </label>
 
       <label>
         Описание:
         <input class="" type="text" name="description" id="newToDo-description" placeholder="описание новой задачи">
+        <p class="errorMessage" id="newToDo-desc-error">Максимум 300 символов!</p>
       </label>
 
       <label>
         Дедлайн:
         <input class="" type="date" name="deadline" id="newToDo-deadline">
+        <p class="errorMessage" id="newToDo-date-error">Неверная дата дедлайна!</p>
       </label>
 
       <div class="dropdown" id="create-modal-tags-dropdown">
@@ -147,6 +151,7 @@
 
         </div>
       </div>
+      <p class="errorMessage" id="newToDo-tags-error">Теги не могут быть пустыми!</p>
 
       <label>
         Статус выполнения
@@ -157,7 +162,7 @@
       </label>
       <div class="form-buttons-container">
         <button class="cancel-button" type="reset" id="closeModal">Отмена</button>
-        <button class="accept-button" type="button" id="acceptCreation">Сохранить</button>
+        <button class="accept-button" type="reset" id="acceptCreation">Сохранить</button>
       </div>
     </form>
   </dialog>
@@ -168,16 +173,20 @@
       <label>
         Название:
         <input class="" type="text" name="name" id="editToDo-name" placeholder="новое название задачи">
+        <p class="errorMessage" id="editToDo-long-name-error">Максимум 25 символов!</p>
+        <p class="errorMessage" id="editToDo-empty-name-error">Название задачи не должно быть пустым!</p>
       </label>
 
       <label>
         Описание:
         <input class="" type="text" name="description" id="editToDo-description" placeholder="новое описание задачи">
+        <p class="errorMessage" id="editToDo-desc-error">Максимум 300 символов!</p>
       </label>
 
       <label>
         Дедлайн:
         <input class="" type="date" name="deadline" id="editToDo-deadline">
+        <p class="errorMessage" id="editToDo-date-error">Неверная дата дедлайна!</p>
       </label>
 
       <div class="dropdown" id="edit-modal-tags-dropdown">
@@ -189,6 +198,7 @@
 
         </div>
       </div>
+      <p class="errorMessage" id="editToDo-tags-error">Теги не могут быть пустыми!</p>
 
       <label>
         Статус выполнения
@@ -211,6 +221,9 @@
       <label>
         Название:
         <input class="" type="text" name="name" id="createTag-name" placeholder="название нового тега">
+        <p class="errorMessage" id="newTag-long-name-error">Максимум 25 символов!</p>
+        <p class="errorMessage" id="newTag-empty-name-error">Название тэга не может быть пустым!</p>
+        <p class="errorMessage" id="newTag-existing-name-error">Данный тэг уже существует!</p>
       </label>
 
       <div class="form-buttons-container">
