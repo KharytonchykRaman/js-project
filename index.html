@@ -11,96 +11,92 @@
 </head>
 
 <body>
-  <div class="wrapper">
-    <div class="content">
-      <header class="header">
-        <div class="header-container">
-          <a href="" class="logo">Список дел</a>
-          <div class="info-container">
-            <div class="info" id="currency">Валюта: </div>
-            <div class="info" id="weather">Температура: </div>
+  <header class="header">
+    <div class="header-container">
+      <a href="" class="logo">Список дел</a>
+      <div class="info-container">
+        <div class="info" id="currency">Валюта: </div>
+        <div class="info" id="weather">Температура: </div>
+      </div>
+    </div>
+  </header>
+  <main class="main">
+    <section class="section-1">
+
+      <div class="create-container">
+        <div class="sort-filter">
+          <div class="dropdown" id="sort-dropdown">
+            <button class="dropdown-button" id="sort-dropdown-button">
+              <img src="icons8-sort-100.png" alt="" class="icon"> Сортировка</button>
+            <ul class="dropdown-content" id="sort-dropdown-content">
+              <li data-value="createDate">По дате создания</li>
+              <li data-value="name">По алфавиту</li>
+              <li data-value="priority">По приоритету</li>
+            </ul>
+          </div>
+
+          <div class="dropdown" id="filter-dropdown">
+            <button class="dropdown-button" id="filter-dropdown-button">
+              <img src="icons8-filter-100.png" alt="" class="icon"> Фильтрация</button>
+            <ul class="dropdown-content" id="filter-dropdown-content">
+
+              <button class="dropdown-button" id="status-dropdown-button" type="button">По статусу</button>
+              <select class="dropdown-content" id="filter-status-dropdown-content">
+                <option value="Все варианты">Все варианты</option>
+                <option value="В процессе">В процессе</option>
+                <option value="Завершено">Завершено</option>
+              </select>
+
+              <button type="button" class="dropdown-button" id="tags-dropdown-button">По тегам</button>
+              <div class="dropdown-content tags-dropdown" id="filter-tags-dropdown-content"></div>
+
+              <button class="dropdown-button" id="createDate-dropdown-button" type="button">По дате
+                создания</button>
+              <li class="dropdown-content" id="filter-createDate-dropdown-content">
+                <label>
+                  До:
+                  <input type="date" id="filter-createDate-before-input">
+                </label>
+                <label>
+                  После:
+                  <input type="date" id="filter-createDate-after-input">
+                </label>
+              </li>
+
+              <button class="dropdown-button" id="deadline-dropdown-button" type="button">По дедлайну</button>
+              <li class="dropdown-content" id="filter-deadline-dropdown-content">
+                <label>
+                  До:
+                  <input type="date" id="filter-deadline-before-input">
+                </label>
+                <label>
+                  После:
+                  <input type="date" id="filter-deadline-after-input">
+                </label>
+              </li>
+              <div class="form-buttons-container">
+                <button class="cancel-button" type="reset" id="cancelFilterButton">Отменить</button>
+                <button class="accept-button" type="button" id="acceptFilterButton">Применить</button>
+              </div>
+            </ul>
+
           </div>
         </div>
-      </header>
-      <main class="main">
-        <section class="section-1">
 
-          <div class="create-container">
-            <div class="sort-filter">
-              <div class="dropdown" id="sort-dropdown">
-                <button class="dropdown-button" id="sort-dropdown-button">
-                  <img src="icons8-sort-100.png" alt="" class="icon"> Сортировка</button>
-                <ul class="dropdown-content" id="sort-dropdown-content">
-                  <li data-value="createDate">По дате создания</li>
-                  <li data-value="name">По алфавиту</li>
-                  <li data-value="priority">По приоритету</li>
-                </ul>
-              </div>
+        <div class="create-buttons">
+          <button class="create-button" id="createTodo-button">Добавить дело</button>
+          <button class="create-button" id="createTag-button">Добавить тег</button>
+        </div>
 
-              <div class="dropdown" id="filter-dropdown">
-                <button class="dropdown-button" id="filter-dropdown-button">
-                  <img src="icons8-filter-100.png" alt="" class="icon"> Фильтрация</button>
-                <ul class="dropdown-content" id="filter-dropdown-content">
+      </div>
 
-                  <button class="dropdown-button" id="status-dropdown-button" type="button">По статусу</button>
-                  <select class="dropdown-content" id="filter-status-dropdown-content">
-                    <option value="Все варианты">Все варианты</option>
-                    <option value="В процессе">В процессе</option>
-                    <option value="Завершено">Завершено</option>
-                  </select>
+      <div id="todo-container"></div>
 
-                  <button type="button" class="dropdown-button" id="tags-dropdown-button">По тегам</button>
-                  <div class="dropdown-content tags-dropdown" id="filter-tags-dropdown-content"></div>
-
-                  <button class="dropdown-button" id="createDate-dropdown-button" type="button">По дате
-                    создания</button>
-                  <li class="dropdown-content" id="filter-createDate-dropdown-content">
-                    <label>
-                      До:
-                      <input type="date" id="filter-createDate-before-input">
-                    </label>
-                    <label>
-                      После:
-                      <input type="date" id="filter-createDate-after-input">
-                    </label>
-                  </li>
-
-                  <button class="dropdown-button" id="deadline-dropdown-button" type="button">По дедлайну</button>
-                  <li class="dropdown-content" id="filter-deadline-dropdown-content">
-                    <label>
-                      До:
-                      <input type="date" id="filter-deadline-before-input">
-                    </label>
-                    <label>
-                      После:
-                      <input type="date" id="filter-deadline-after-input">
-                    </label>
-                  </li>
-                  <div class="form-buttons-container">
-                    <button class="cancel-button" type="reset" id="cancelFilterButton">Отменить</button>
-                    <button class="accept-button" type="button" id="acceptFilterButton">Применить</button>
-                  </div>
-                </ul>
-
-              </div>
-            </div>
-
-            <div class="create-buttons">
-              <button class="create-button" id="createTodo-button">Добавить дело</button>
-              <button class="create-button" id="createTag-button">Добавить тег</button>
-            </div>
-
-          </div>
-
-          <div id="todo-container"></div>
-
-        </section>
-      </main>
-    </div>
-    <footer class="footer">
-      created by Raman Kharytonchyk
-    </footer>
-  </div>
+    </section>
+  </main>
+  <footer class="footer">
+    created by Raman Kharytonchyk
+  </footer>
 
   <!-- toast messages -->
   <div id="toast" class="hidden"></div>
@@ -116,6 +112,7 @@
       <div class="todo-buttons">
         <button class="edit-todo-button"></button>
         <button class="delete-todo-button"></button>
+        <button class="priority-button"></button>
       </div>
     </div>
   </template>

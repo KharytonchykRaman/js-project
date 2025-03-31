@@ -60,38 +60,40 @@ const newToDoDateErr = document.getElementById("newToDo-date-error");
 const newToDoDescErr = document.getElementById("newToDo-desc-error");
 const newToDoTagsErr = document.getElementById("newToDo-tags-error");
 
-newToDoName.addEventListener('input', () => {
+newToDoName.addEventListener("input", () => {
   hideElements(newToDoEmptyNameErr);
   if (newToDoName.value.length > MAX_NAME_LENGTH) {
     newToDoName.value = newToDoName.value.slice(0, MAX_NAME_LENGTH);
-    newToDoLongNameErr.style.display = 'block';
+    newToDoLongNameErr.style.display = "block";
   } else {
     hideElements(newToDoLongNameErr);
   }
 });
 
-newToDoDesc.addEventListener('input', () => {
+newToDoDesc.addEventListener("input", () => {
   if (newToDoDesc.value.length > 300) {
     newToDoDesc.value = newToDoDesc.value.slice(0, 300);
-    newToDoDescErr.style.display = 'block';
+    newToDoDescErr.style.display = "block";
   } else {
     hideElements(newToDoDescErr);
   }
 });
 
-newToDoDate.addEventListener('input', () => {
+newToDoDate.addEventListener("input", () => {
   hideElements(newToDoDateErr);
 });
 
 const newTagName = document.getElementById("createTag-name");
 const newTagEmptyNameErr = document.getElementById("newTag-empty-name-error");
-const newTagExistingNameErr = document.getElementById("newTag-existing-name-error");
+const newTagExistingNameErr = document.getElementById(
+  "newTag-existing-name-error"
+);
 const newTagLongNameErr = document.getElementById("newTag-long-name-error");
 
-newTagName.addEventListener('input', () => {
+newTagName.addEventListener("input", () => {
   if (newTagName.value.length > MAX_NAME_LENGTH) {
     newTagName.value = newTagName.value.slice(0, MAX_NAME_LENGTH);
-    newTagLongNameErr.style.display = 'block';
+    newTagLongNameErr.style.display = "block";
   } else {
     hideElements(newTagLongNameErr);
   }
@@ -103,31 +105,33 @@ const editTodoDesc = document.getElementById("editToDo-description");
 const editTodoStatus = document.getElementById("editToDo-status");
 
 const editToDoLongNameErr = document.getElementById("editToDo-long-name-error");
-const editToDoEmptyNameErr = document.getElementById("editToDo-empty-name-error");
+const editToDoEmptyNameErr = document.getElementById(
+  "editToDo-empty-name-error"
+);
 const editToDoDateErr = document.getElementById("editToDo-date-error");
 const editToDoDescErr = document.getElementById("editToDo-desc-error");
 const editToDoTagsErr = document.getElementById("editToDo-tags-error");
 
-editTodoName.addEventListener('input', () => {
+editTodoName.addEventListener("input", () => {
   hideElements(editToDoEmptyNameErr);
   if (editTodoName.value.length > MAX_NAME_LENGTH) {
     editTodoName.value = editTodoName.value.slice(0, MAX_NAME_LENGTH);
-    editToDoLongNameErr.style.display = 'block';
+    editToDoLongNameErr.style.display = "block";
   } else {
     hideElements(editToDoLongNameErr);
   }
 });
 
-editTodoDesc.addEventListener('input', () => {
+editTodoDesc.addEventListener("input", () => {
   if (editTodoDesc.value.length > 300) {
     editTodoDesc.value = editTodoDesc.value.slice(0, 300);
-    editToDoDescErr.style.display = 'block';
+    editToDoDescErr.style.display = "block";
   } else {
     hideElements(editToDoDescErr);
   }
 });
 
-editTodoDate.addEventListener('input', () => {
+editTodoDate.addEventListener("input", () => {
   hideElements(editToDoDateErr);
 });
 
@@ -193,7 +197,10 @@ editModalDropdownButton.addEventListener("click", () => {
 createTodoButton.addEventListener("click", openCreateToDoModal);
 
 cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
-acceptCreateToDoButton.addEventListener("click",()=>{renderNewToDo(); hideElements(newToDoLongNameErr,newToDoDescErr)} );
+acceptCreateToDoButton.addEventListener("click", () => {
+  renderNewToDo();
+  hideElements(newToDoLongNameErr, newToDoDescErr);
+});
 
 cancelEditButton.addEventListener("click", closeEditToDoModal);
 
@@ -201,7 +208,10 @@ acceptEditButton.addEventListener("click", renderEditedToDo);
 
 createTagButton.addEventListener("click", openCreateTagModal);
 cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
-acceptCreateTagButton.addEventListener("click",()=>{createNewTag(); hideElements(newTagLongNameErr)} );
+acceptCreateTagButton.addEventListener("click", () => {
+  createNewTag();
+  hideElements(newTagLongNameErr);
+});
 
 sortButton.addEventListener("click", (event) => {
   switchDisplay(sortOptionsList);
@@ -287,7 +297,7 @@ function openEditToDoModal() {
 
 function closeCreateToDoModal() {
   createTodoModal.close();
-  hideElements(newToDoLongNameErr,newToDoDescErr);
+  hideElements(newToDoLongNameErr, newToDoDescErr);
 }
 
 function closeEditToDoModal() {
@@ -476,6 +486,7 @@ function createNewToDo() {
     createdAt: new Date(),
     updatedAt: new Date(),
     history: [{ action: "created", timestamp: new Date() }],
+    priority: false,
   };
 
   return newToDo;
@@ -579,8 +590,26 @@ function initToDoIntoTemplate(todo) {
     .addEventListener("click", function () {
       initEditToDoModal(todo.id);
     });
+  item
+    .querySelector(".priority-button")
+    .addEventListener("click", function (event) {
+      changePriority(todo);
+      changePriorityImg(event.target);
+    });
 
   return item;
+}
+
+function changePriority(todo) {
+  todo.priority = !todo.priority;
+}
+
+function changePriorityImg(button) {
+  if (!button.style.backgroundImage.includes("filled-star-icon.png")) {
+    button.style.backgroundImage = "url('filled-star-icon.png')";
+  } else {
+    button.style.backgroundImage = "url('empty-star-icon.png')";
+  }
 }
 
 function renderEditedToDo() {
@@ -661,8 +690,9 @@ function sortTodosByName(todos) {
 }
 
 function sortTodosByPriority(todos) {
-  // codes
-  return todos;
+  return todos.sort((todo1, todo2) =>
+    todo1.priority === true
+  );
 }
 
 const filterButton = document.getElementById("filter-dropdown-button");
@@ -850,13 +880,16 @@ function filterTodos() {
   const todos = getToDos();
 
   const filteredTodos = todos.filter((todo) => {
-    debugger
+    debugger;
     if (status && todo.status !== status) return false; //короткое замыкание
     if (!isSubset(todo.tags, tags)) return false;
-    if (createDateAfter &&  new Date(todo.createdAt) <= createDateAfter) return false;
-    if (createDateBefore && new Date(todo.createdAt) >= createDateBefore) return false;
+    if (createDateAfter && new Date(todo.createdAt) <= createDateAfter)
+      return false;
+    if (createDateBefore && new Date(todo.createdAt) >= createDateBefore)
+      return false;
     if (deadlineAfter && new Date(todo.deadline) <= deadlineAfter) return false;
-    if (deadlineBefore && new Date(todo.deadline) >= deadlineBefore) return false;
+    if (deadlineBefore && new Date(todo.deadline) >= deadlineBefore)
+      return false;
 
     return true;
   });
@@ -869,4 +902,4 @@ inputCurrency();
 
 renderLocalStorageToDosArray();
 
-renderTagsDropdown(filterTagsDropdownContent);  
+renderTagsDropdown(filterTagsDropdownContent);

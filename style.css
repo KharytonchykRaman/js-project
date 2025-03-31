@@ -138,14 +138,18 @@ dialog label > * {
 
 .edit-todo-button {
   background: url(edit-icon.png) no-repeat center center;
-  padding: 25px;
+  border: 2px solid #333333;
+  border-radius: 4px;
+  padding: 20px;
   min-height: 30px;
   min-width: 30px;
 }
 
 .delete-todo-button {
   background: url(delete-icon.png) no-repeat center center;
-  padding: 25px;
+  border: 2px solid #333333;
+  border-radius: 4px;
+  padding: 20px;
   min-height: 30px;
   min-width: 30px;
 }
@@ -171,12 +175,12 @@ dialog label > * {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  width: 150px;
+  width: 180px;
   margin-bottom: 20px;
 }
 
 .todo-card > * {
-  max-width: 120px;
+  max-width: 100%;
   word-wrap: break-word;
   white-space: normal;
 }
@@ -186,18 +190,11 @@ dialog label > * {
   gap: 5px;
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.content {
-  flex: 1 0 auto;
-}
-
 .footer {
-  flex: 0 0 auto;
   background-color: darkkhaki;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 }
 
 #toast {
@@ -384,9 +381,15 @@ dialog label > * {
   gap: 300px;
 }
 
-.errorMessage{
-  color: red; 
+.errorMessage {
+  color: red;
   display: none;
+}
+
+.priority-button {
+  background: url("empty-star-icon.png") no-repeat center center;
+  border: none;
+  padding: 22px;
 }
 
 @media (max-width: 1150px) {
@@ -438,7 +441,7 @@ dialog label > * {
     margin: 20px 10px;
   }
 
-  .dropdown-content .dropdown-content{
+  .dropdown-content .dropdown-content {
     min-width: 150px;
   }
 
@@ -456,11 +459,11 @@ dialog label > * {
     font-size: 15px;
   }
 
-  #filter-dropdown-content .form-buttons-container button{
+  #filter-dropdown-content .form-buttons-container button {
     padding: 8px 10px;
   }
 
-  #filter-dropdown-content{
+  #filter-dropdown-content {
     min-width: 185px;
   }
 }
