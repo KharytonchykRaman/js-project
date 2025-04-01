@@ -194,7 +194,10 @@ editModalDropdownButton.addEventListener("click", () => {
   switchDisplay(editModalDropdownContent);
 });
 
-createTodoButton.addEventListener("click", openCreateToDoModal);
+createTodoButton.addEventListener("click", () => {
+  openCreateToDoModal();
+  hideElements(Array.from(createTodoModal.querySelectorAll(".errorMessage")));
+});
 
 cancelCreateToDoButton.addEventListener("click", closeCreateToDoModal);
 acceptCreateToDoButton.addEventListener("click", () => {
@@ -206,7 +209,10 @@ cancelEditButton.addEventListener("click", closeEditToDoModal);
 
 acceptEditButton.addEventListener("click", renderEditedToDo);
 
-createTagButton.addEventListener("click", openCreateTagModal);
+createTagButton.addEventListener("click", () => {
+  openCreateTagModal();
+  hideElements(Array.from(createTagModal.querySelectorAll(".errorMessage")));
+});
 cancelCreateTagButton.addEventListener("click", closeCreateTagModal);
 acceptCreateTagButton.addEventListener("click", () => {
   createNewTag();
@@ -589,6 +595,7 @@ function initToDoIntoTemplate(todo) {
     .querySelector(".edit-todo-button")
     .addEventListener("click", function () {
       initEditToDoModal(todo.id);
+      hideElements(Array.from(editTodoModal.querySelectorAll(".errorMessage")));
     });
   item
     .querySelector(".priority-button")
@@ -597,11 +604,20 @@ function initToDoIntoTemplate(todo) {
       changePriorityImg(event.target);
     });
 
+  item.querySelector(".priority-button").style.backgroundImage = todo.priority
+    ? "url('filled-star-icon.png')"
+    : "url('empty-star-icon.png')";
+
   return item;
 }
 
 function changePriority(todo) {
   todo.priority = !todo.priority;
+
+  const todoList = getToDoList();
+
+  todoList.replaceToDoById(todo.id, todo);
+  uploadToDoListToLocalStorage(todoList);
 }
 
 function changePriorityImg(button) {
@@ -690,9 +706,12 @@ function sortTodosByName(todos) {
 }
 
 function sortTodosByPriority(todos) {
-  return todos.sort((todo1, todo2) =>
-    todo1.priority === true
-  );
+  return todos.sort((todo1, todo2) => {
+    if (todo1.priority === todo2.priority) {
+      return 0;
+    }
+    return todo1.priority ? -1 : 1;
+  });
 }
 
 const filterButton = document.getElementById("filter-dropdown-button");
