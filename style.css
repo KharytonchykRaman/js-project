@@ -305,6 +305,7 @@ dialog label > * {
 }
 
 #sort-dropdown-button {
+  border-bottom: #b8b8b8 1px solid;
   width: 100%;
   border-radius: 5px 5px 0 0;
 }

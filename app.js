@@ -581,11 +581,11 @@ function confirmDeleteToDo(id) {
 function initToDoIntoTemplate(todo) {
   const item = template.content.cloneNode(true);
 
-  item.querySelector(".todo-name").innerHTML = todo.title;
-  item.querySelector(".todo-description").innerHTML = todo.description;
-  item.querySelector(".todo-deadline").innerHTML = todo.deadline;
-  item.querySelector(".todo-tags").innerHTML = todo.tags;
-  item.querySelector(".todo-status").innerHTML = todo.status;
+  item.querySelector(".todo-name").textContent = todo.title;
+  item.querySelector(".todo-description").textContent = todo.description;
+  item.querySelector(".todo-deadline").textContent = todo.deadline;
+  item.querySelector(".todo-tags").textContent = todo.tags;
+  item.querySelector(".todo-status").textContent = todo.status;
   item
     .querySelector(".delete-todo-button")
     .addEventListener("click", function () {
