@@ -197,7 +197,7 @@ dialog label > * {
   width: 100%;
 }
 
-#toast {
+.toast {
   position: fixed;
   bottom: 50px;
   right: 3vw;
@@ -212,6 +212,18 @@ dialog label > * {
 .hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+.toast.success {
+  background-color: #2ecc71;
+}
+
+.toast.error {
+  background-color: #dc3545;
+}
+
+.toast.info {
+  background-color: #308bc8;
 }
 
 .sort-filter {

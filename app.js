@@ -561,12 +561,12 @@ function uploadTagListToLocalStorage(tagList) {
 }
 
 /**
- * Проверяет, что имя задачи не пустое и длина меньше максимальной.
+ * Проверяет, что имя задачи не пустое.
  * @param {string} name - Название задачи.
  * @returns {boolean} true, если прошло валидацию.
  */
 function isNameValid(name) {
-  return name.trim().length > 0 && name.trim().length < MAX_NAME_LENGTH;
+  return name.trim().length > 0;
 }
 
 /**
@@ -614,20 +614,24 @@ function doesTagExist(tag) {
  * @returns {boolean} true, если данные валидны.
  */
 function validateNewToDo() {
+  debugger
   const name = newToDoName.value;
   const date = newToDoDate.value;
   const desc = newToDoDesc.value;
   const tags = getCheckedTags(createTodoModal);
   if (!isNameValid(name)) {
     newToDoEmptyNameErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   if (!isDateValid(date)) {
     newToDoDateErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   if (!areTagsValid(tags)) {
     newToDoTagsErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   return true;
@@ -641,10 +645,12 @@ function validateNewTag() {
   const newTag = newTagName.value;
   if (!isNameValid(newTag)) {
     newTagEmptyNameErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   if (!doesTagExist(newTag)) {
     newTagExistingNameErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   return true;
@@ -661,14 +667,17 @@ function validateEditedToDo() {
   const desc = editTodoDesc.value;
   if (!isNameValid(name)) {
     editToDoEmptyNameErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   if (!isDateValid(date)) {
     editToDoDateErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   if (!areTagsValid(tags)) {
     editToDoTagsErr.style.display = "block";
+    showCustomToast("Ошибка валидации", "error");
     return false;
   }
   return true;
@@ -683,7 +692,7 @@ function createNewTag() {
     const tagList = getTagList();
     tagList.addTag(tagName);
     uploadTagListToLocalStorage(tagList);
-    showCustomToast("Тег добавлен!");
+    showCustomToast("Тег добавлен!","success");
     closeCreateTagModal();
   }
 }
@@ -727,7 +736,7 @@ function renderNewToDo() {
     uploadToDoListToLocalStorage(toDoList);
     renderLocalStorageToDosArray();
     closeCreateToDoModal();
-    showCustomToast("Задача добавлена!");
+    showCustomToast("Задача добавлена!","success");
   }
 }
 
@@ -750,7 +759,7 @@ function editToDo(id) {
     uploadToDoListToLocalStorage(todoList);
     closeEditToDoModal();
     renderLocalStorageToDosArray();
-    showCustomToast("Задача обновлена!");
+    showCustomToast("Задача обновлена!","success");
   }
 }
 
@@ -802,7 +811,7 @@ function confirmDeleteToDo(id) {
   const confirmation = confirm("Вы уверены, что хотите удалить задачу?");
   if (confirmation) {
     deleteToDo(id);
-    showCustomToast("Задача удалена!");
+    showCustomToast("Задача удалена!","success");
     renderLocalStorageToDosArray();
   }
 }
@@ -912,9 +921,11 @@ function renderToDosArray(toDosArray) {
 /**
  * Отображает уведомление.
  * @param {string} message - Сообщение.
+ * @param {string} type - Тип сообщения.
  */
-function showCustomToast(message) {
+function showCustomToast(message, type = "info") {
   toastElement.textContent = message;
+  toastElement.className = `toast ${type} hidden`;
   toastElement.classList.remove("hidden");
   setTimeout(() => {
     toastElement.classList.add("hidden");
